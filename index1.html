@@ -15,6 +15,7 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* Temel Sıfırlama */
         * {
             margin: 0;
             padding: 0;
@@ -30,6 +31,7 @@
             min-height: 100vh;
         }
 
+        /* Arka Plan Görseli */
         .bg-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -51,14 +53,18 @@
             animation: fadeInDown 1s ease;
         }
 
+        /* ARISTOKRAT Başlığı */
         h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-size: clamp(2rem, 10vw, 4.5rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 8px;
+            padding-left: 8px;
             margin-bottom: 10px;
             color: #fff;
             text-shadow: 0 0 20px var(--neon-green);
+            width: 100%;
+            display: inline-block;
         }
 
         .subtitle {
@@ -70,6 +76,7 @@
             font-size: 0.9rem;
         }
 
+        /* Kullanıcı Bilgisi Girişi */
         .user-info {
             margin-bottom: 3rem;
         }
@@ -95,7 +102,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Table Grid */
+        /* Masa Kartları Grid Yapısı */
         .tables-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -122,7 +129,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(57, 255, 20, 0.2);
         }
 
-        /* Image Styling */
         .card-image {
             width: 100%;
             height: 200px;
@@ -135,10 +141,6 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
-        }
-
-        .table-card:hover .card-image img {
-            transform: scale(1.1);
         }
 
         .card-content {
@@ -176,6 +178,103 @@
             background: rgba(255, 68, 68, 0.1) !important;
         }
 
+        /* REKLAM BÖLMESİ STİLLƏRİ */
+        .ad-container {
+            margin: 5rem auto 3rem auto;
+            max-width: 1000px;
+            text-align: left;
+            padding: 0 1rem;
+        }
+
+        .google-label {
+            font-size: 10px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 300;
+        }
+
+        .ad-banner {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(30, 30, 30, 0.6) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .ad-content h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .ad-content p {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+
+        .btn-ad {
+            background: transparent;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .btn-ad:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* FOOTER STİLLƏRİ */
+        .footer {
+            padding: 40px 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-weight: 900;
+            letter-spacing: 5px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #444;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -197,7 +296,6 @@
             width: 100%;
             max-width: 450px;
             box-shadow: 0 0 50px rgba(57, 255, 20, 0.2);
-            position: relative;
         }
 
         .form-group {
@@ -268,9 +366,17 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2.8rem; }
-            .container { padding: 1rem; }
+        @media (max-width: 768px) {
+            .ad-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .ad-content p {
+                margin: 0 auto 20px auto;
+            }
+            h1 { font-size: 2.2rem; letter-spacing: 2px; padding-left: 2px;}
+            .container { padding: 1rem 0.5rem; }
         }
     </style>
 </head>
@@ -291,7 +397,7 @@
         </header>
 
         <div id="tables-section" class="tables-grid">
-            <!-- Table 1 -->
+            <!-- Masa 1 -->
             <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
                 <div class="card-image">
                     <img src="billiard1.webp" alt="Masa 1">
@@ -304,10 +410,10 @@
                 </div>
             </div>
 
-            <!-- Table 2 -->
+            <!-- Masa 2 -->
             <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="/billiard2.webp" alt="Masa 2">
+                    <img src="billiard2.webp" alt="Masa 2">
                 </div>
                 <div class="card-content">
                     <h3>Masa 2</h3>
@@ -317,10 +423,10 @@
                 </div>
             </div>
 
-            <!-- Table 3 -->
+            <!-- Masa 3 -->
             <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="GÖRSEL_YOLU_BURAYA_3" alt="Masa 3">
+                    <img src="billiard3.webp" alt="Masa 3">
                 </div>
                 <div class="card-content">
                     <h3>Masa 3</h3>
@@ -330,10 +436,10 @@
                 </div>
             </div>
 
-            <!-- Table 4 -->
+            <!-- Masa 4 -->
             <div class="table-card" onclick="openModal('Masa 4 (Amerikan Pool)')">
                 <div class="card-image">
-                    <img src="GÖRSEL_YOLU_BURAYA_4" alt="Masa 4">
+                    <img src="billiard4.jpg" alt="Masa 4">
                 </div>
                 <div class="card-content">
                     <h3>Masa 4</h3>
@@ -346,7 +452,7 @@
             <!-- Tennis -->
             <div class="table-card" onclick="openModal('Tennis 1')">
                 <div class="card-image">
-                    <img src="GÖRSEL_YOLU_BURAYA_TENNIS" alt="Tennis 1">
+                    <img src="tennis.jpg" alt="Tennis 1">
                 </div>
                 <div class="card-content">
                     <h3>Tennis 1</h3>
@@ -356,11 +462,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- REKLAM BÖLMESİ -->
+        <div class="ad-container">
+            <p class="google-label">Google Reklam</p>
+            <div class="ad-banner">
+                <div class="ad-content">
+                    <h2>Viktoria Paltar Boyaları</h2>
+                    <p>Sevdiyiniz geyimlərin rəngini ilk günkü kimi bərpa edin! Yüksək keyfiyyətli və qalıcı paltar boyalarının tək ünvanı.</p>
+                </div>
+                <a href="https://viktoria-az.store" target="_blank" class="btn-ad">SAYTA KEÇİD</a>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-logo">ARISTOKRAT</div>
+            <p class="copyright">Bütün haqları qorunur © 2026</p>
+        </footer>
     </div>
 
-    <!-- Modal -->
+    <!-- Rezervasyon Modalı -->
     <div id="resModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="position: relative;">
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 25px; text-transform: uppercase;">Rezervasiya</h2>
             
@@ -456,7 +580,7 @@
             }
 
             if (checkConflict(selectedTable, startTotalMins, endTotalMins)) {
-                alert("Bu vaxt aralığı artıq doludur!");
+                alert("Bu vaxt aralığı artıq doludur! Zəhmət olmasa başqa vaxt seçin.");
                 return;
             }
 
