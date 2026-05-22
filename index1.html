@@ -178,7 +178,7 @@
             background: rgba(255, 68, 68, 0.1) !important;
         }
 
-        /* REKLAM BÖLMESİ STİLLƏRİ */
+        /* REKLAM BÖLMESİ STİLLƏRİ (Yığcamlaşdırılmış Yeni Dizayn) */
         .ad-container {
             margin: 5rem auto 3rem auto;
             max-width: 1000px;
@@ -187,26 +187,29 @@
         }
 
         .google-label {
-            font-size: 10px;
-            color: #555;
+            font-size: 11px;
+            color: #fff;
+            text-shadow: 0 0 8px var(--neon-green), 0 0 15px var(--neon-green);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            font-weight: 800;
+            display: inline-block;
         }
 
         .ad-banner {
-            background: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(30, 30, 30, 0.6) 100%);
+            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(25, 25, 25, 0.8) 100%);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 15px;
+            padding: 15px 30px; /* Azaldılmış daxili boşluq */
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             position: relative;
             overflow: hidden;
+            min-height: 90px; /* Digər kartlardan fərqli, ensiz və zərif hündürlük */
         }
 
         .ad-banner::before {
@@ -216,35 +219,41 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(57, 255, 20, 0.03) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.05) 0%, transparent 60%);
             pointer-events: none;
         }
 
+        .ad-content {
+            text-align: left;
+        }
+
         .ad-content h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.4rem; /* Daha yığcam başlıq */
+            margin-bottom: 4px;
             color: #fff;
+            font-weight: 700;
         }
 
         .ad-content p {
             color: #aaa;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            max-width: 600px;
+            font-size: 0.85rem; /* Kiçildilmiş mətn ölçüsü */
+            line-height: 1.4;
+            max-width: 650px;
         }
 
         .btn-ad {
             background: transparent;
             color: var(--neon-green);
             border: 1px solid var(--neon-green);
-            padding: 12px 25px;
-            border-radius: 10px;
+            padding: 10px 22px; /* Kiçik buton ölçüsü */
+            border-radius: 8px;
             font-weight: 700;
+            font-size: 0.85rem;
             text-decoration: none;
             transition: all 0.3s ease;
             display: inline-block;
             white-space: nowrap;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
         }
 
         .btn-ad:hover {
@@ -264,15 +273,19 @@
         .footer-logo {
             font-weight: 900;
             letter-spacing: 5px;
-            color: #333;
-            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 0 15px var(--neon-green), 0 0 25px var(--neon-green); /* Güclü neon effekti */
+            margin-bottom: 12px;
+            font-size: 1.4rem;
         }
 
         .copyright {
             font-size: 0.75rem;
-            color: #444;
-            letter-spacing: 1px;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.6); /* Neon effektli hüquq mətni */
+            letter-spacing: 2px;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
         /* Modal */
@@ -370,10 +383,14 @@
             .ad-banner {
                 flex-direction: column;
                 text-align: center;
-                padding: 30px 20px;
+                padding: 20px 15px;
+                gap: 15px;
+            }
+            .ad-content {
+                text-align: center;
             }
             .ad-content p {
-                margin: 0 auto 20px auto;
+                margin: 0 auto;
             }
             h1 { font-size: 2.2rem; letter-spacing: 2px; padding-left: 2px;}
             .container { padding: 1rem 0.5rem; }
@@ -469,7 +486,7 @@
             <div class="ad-banner">
                 <div class="ad-content">
                     <h2>Viktoria Paltar Boyaları</h2>
-                    <p>Sevdiyiniz geyimlərin rəngini ilk günkü kimi bərpa edin! Yüksək keyfiyyətli və qalıcı paltar boyalarının tək ünvanı.</p>
+                    <p>Sevdiyiniz geyimlərin rəngini ilk günkü kimi bərpa edin! Yüksək keyfiyyətli və qalıcı boyaların tək ünvanı.</p>
                 </div>
                 <a href="https://viktoria-az.store" target="_blank" class="btn-ad">SAYTA KEÇİD</a>
             </div>
