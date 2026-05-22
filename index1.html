@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aristokrat | Premium Billiard Lounge</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --dark-bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(57, 255, 20, 0.2);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a3a12 0%, #050505 80%);
+            min-height: 100vh;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=2070') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: -1;
+            filter: grayscale(100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header {
+            padding: 3rem 0;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .subtitle {
+            color: var(--neon-green);
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            margin-bottom: 3rem;
+        }
+
+        .user-info input {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 18px 30px;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+            text-align: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info input:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Table Grid */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: var(--neon-green);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(57, 255, 20, 0.2);
+        }
+
+        /* Image Styling */
+        .card-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .table-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .table-card h3 {
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+        }
+
+        .table-card p {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            color: var(--neon-green);
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: rgba(57, 255, 20, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .occupied {
+            border-color: #ff4444 !important;
+            color: #ff4444 !important;
+            background: rgba(255, 68, 68, 0.1) !important;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #0a0a0a;
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--neon-green);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 0 50px rgba(57, 255, 20, 0.2);
+            position: relative;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--neon-green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        select, input[type="time"] {
+            width: 100%;
+            padding: 15px;
+            background: #151515;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 12px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .btn-reserve {
+            background: var(--neon-green);
+            color: black;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+            transition: var(--transition);
+        }
+
+        .btn-reserve:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 35px var(--neon-green);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            cursor: pointer;
+            font-size: 2rem;
+            color: #555;
+        }
+
+        .timeline {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: #aaa;
+            background: rgba(0,0,0,0.3);
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8rem; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <div class="container">
+        <header>
+            <h1>ARISTOKRAT</h1>
+            <p class="subtitle">Premium Billiard & Lounge</p>
+            
+            <div class="user-info">
+                <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." required>
+            </div>
+
+            <button class="btn-reserve" onclick="scrollToTables()" style="width: auto; padding: 18px 50px;">REZERV EDİN</button>
+        </header>
+
+        <div id="tables-section" class="tables-grid">
+            <!-- Table 1 -->
+            <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
+                <div class="card-image">
+                    <img src="billiard1.webp" alt="Masa 1">
+                </div>
+                <div class="card-content">
+                    <h3>Masa 1</h3>
+                    <p>Rus Bilyardı</p>
+                    <div id="status-Masa-1" class="status-badge">Mövcuddur</div>
+                    <div id="time-Masa-1" class="timeline"></div>
+                </div>
+            </div>
+
+            <!-- Table 2 -->
+            <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
+                <div class="card-image">
+                    <img src="/billiard2.webp" alt="Masa 2">
+                </div>
+                <div class="card-content">
+                    <h3>Masa 2</h3>
+                    <p>Rus Bilyardı</p>
+                    <div id="status-Masa-2" class="status-badge">Mövcuddur</div>
+                    <div id="time-Masa-2" class="timeline"></div>
+                </div>
+            </div>
+
+            <!-- Table 3 -->
+            <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
+                <div class="card-image">
+                    <img src="GÖRSEL_YOLU_BURAYA_3" alt="Masa 3">
+                </div>
+                <div class="card-content">
+                    <h3>Masa 3</h3>
+                    <p>Rus Bilyardı</p>
+                    <div id="status-Masa-3" class="status-badge">Mövcuddur</div>
+                    <div id="time-Masa-3" class="timeline"></div>
+                </div>
+            </div>
+
+            <!-- Table 4 -->
+            <div class="table-card" onclick="openModal('Masa 4 (Amerikan Pool)')">
+                <div class="card-image">
+                    <img src="GÖRSEL_YOLU_BURAYA_4" alt="Masa 4">
+                </div>
+                <div class="card-content">
+                    <h3>Masa 4</h3>
+                    <p>Amerikan Pool</p>
+                    <div id="status-Masa-4" class="status-badge">Mövcuddur</div>
+                    <div id="time-Masa-4" class="timeline"></div>
+                </div>
+            </div>
+
+            <!-- Tennis -->
+            <div class="table-card" onclick="openModal('Tennis 1')">
+                <div class="card-image">
+                    <img src="GÖRSEL_YOLU_BURAYA_TENNIS" alt="Tennis 1">
+                </div>
+                <div class="card-content">
+                    <h3>Tennis 1</h3>
+                    <p>Masa Tennisi</p>
+                    <div id="status-Tennis-1" class="status-badge">Mövcuddur</div>
+                    <div id="time-Tennis-1" class="timeline"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="resModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 25px; text-transform: uppercase;">Rezervasiya</h2>
+            
+            <div class="form-group">
+                <label>Başlanğıc Saatı (09:00 - 00:00)</label>
+                <input type="time" id="startTime" min="09:00" max="23:59" value="20:00">
+            </div>
+
+            <div class="form-group">
+                <label>Müddət (Saat)</label>
+                <select id="durationHours">
+                    <option value="1">1 Saat</option>
+                    <option value="2">2 Saat</option>
+                    <option value="3">3 Saat</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Əlavə Dəqiqə</label>
+                <select id="durationMinutes">
+                    <option value="10" selected>10 dəqiqə</option>
+                    <option value="20">20 dəqiqə</option>
+                    <option value="30">30 dəqiqə</option>
+                    <option value="40">40 dəqiqə</option>
+                    <option value="50">50 dəqiqə</option>
+                </select>
+            </div>
+
+            <button class="btn-reserve" onclick="completeReservation()">Rezervasiyanı Tamamla</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedTable = "";
+        let reservations = JSON.parse(localStorage.getItem('billiard_reservations')) || [];
+
+        function scrollToTables() {
+            document.getElementById('tables-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openModal(tableName) {
+            const name = document.getElementById('customerName').value.trim();
+            if (!name) {
+                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                return;
+            }
+            selectedTable = tableName;
+            document.getElementById('modalTitle').innerText = tableName;
+            document.getElementById('resModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('resModal').style.display = 'none';
+        }
+
+        function timeToMinutes(timeStr) {
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function minutesToTime(totalMinutes) {
+            let h = Math.floor(totalMinutes / 60) % 24;
+            let m = totalMinutes % 60;
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+
+        function checkConflict(tableName, startMins, endMins) {
+            return reservations.some(res => {
+                if (res.table !== tableName) return false;
+                const resStart = timeToMinutes(res.start);
+                const resEnd = timeToMinutes(res.end);
+                return (startMins < resEnd && endMins > resStart);
+            });
+        }
+
+        function completeReservation() {
+            const name = document.getElementById('customerName').value;
+            const start = document.getElementById('startTime').value;
+            const dHours = parseInt(document.getElementById('durationHours').value);
+            const dMins = parseInt(document.getElementById('durationMinutes').value);
+            
+            if (!start) return alert("Zəhmət olmasa saat seçin!");
+
+            const startTotalMins = timeToMinutes(start);
+            const durationTotalMins = (dHours * 60) + dMins;
+            const endTotalMins = startTotalMins + durationTotalMins;
+            const end = minutesToTime(endTotalMins);
+
+            if (startTotalMins < 540) {
+                alert("Müəssisə saat 09:00-da açılır.");
+                return;
+            }
+
+            if (checkConflict(selectedTable, startTotalMins, endTotalMins)) {
+                alert("Bu vaxt aralığı artıq doludur!");
+                return;
+            }
+
+            const newReservation = {
+                customer: name,
+                table: selectedTable,
+                start: start,
+                duration: `${dHours} saat ${dMins} dəq`,
+                end: end
+            };
+
+            reservations.push(newReservation);
+            localStorage.setItem('billiard_reservations', JSON.stringify(reservations));
+
+            const msg = `Salam, ${selectedTable} üçün rezervasiya etmək istəyirəm.%0AAd: ${name}%0ABaşlanğıc: ${start}%0AMüddət: ${newReservation.duration}%0ABitiş: ${end}`;
+            window.open(`https://wa.me/994554828424?text=${msg}`, '_blank');
+
+            updateUI();
+            closeModal();
+        }
+
+        function updateUI() {
+            document.querySelectorAll('.status-badge').forEach(el => {
+                el.innerText = "Mövcuddur";
+                el.classList.remove('occupied');
+            });
+            document.querySelectorAll('.timeline').forEach(el => el.innerText = "");
+
+            reservations.forEach(res => {
+                const cleanId = res.table.includes('Tennis') ? 'Tennis-1' : `Masa-${res.table.match(/\d+/)}`;
+                const statusEl = document.getElementById(`status-${cleanId}`);
+                const timeEl = document.getElementById(`time-${cleanId}`);
+
+                if (statusEl) {
+                    statusEl.innerText = "REZERV OLUNUB";
+                    statusEl.classList.add('occupied');
+                }
+                if (timeEl) {
+                    const timeDiv = document.createElement('div');
+                    timeDiv.innerText = `${res.start} - ${res.end}`;
+                    timeEl.appendChild(timeDiv);
+                }
+            });
+        }
+
+        window.onload = updateUI;
+        window.onclick = function(e) { if (e.target == document.getElementById('resModal')) closeModal(); }
+    </script>
+</body>
+</html>
