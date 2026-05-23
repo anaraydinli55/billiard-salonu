@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aristokrat | Premium Billiard Lounge</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,7 +14,6 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Temel Sıfırlama */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* Arka Plan Görseli */
         .bg-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -54,13 +50,12 @@
             animation: fadeInDown 1s ease;
         }
 
-        /* ARISTOKRAT Başlığı - Taşma Önleyici Düzenleme */
         h1 {
             font-size: clamp(2rem, 10vw, 4.5rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 8px;
-            padding-left: 8px; /* Sağdaki T harfinin taşmasını dengelemek için */
+            padding-left: 8px;
             margin-bottom: 10px;
             color: #fff;
             text-shadow: 0 0 20px var(--neon-green);
@@ -77,7 +72,19 @@
             font-size: 0.9rem;
         }
 
-        /* Kullanıcı Bilgisi Girişi */
+        /* Baku saati göstergesi */
+        .baku-clock {
+            display: inline-block;
+            background: rgba(57, 255, 20, 0.08);
+            border: 1px solid rgba(57, 255, 20, 0.25);
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+        }
+
         .user-info {
             margin-bottom: 3rem;
         }
@@ -103,7 +110,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Masa Kartları Grid Yapısı */
         .tables-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -130,7 +136,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(57, 255, 20, 0.2);
         }
 
-        /* Kart Görselleri */
         .card-image {
             width: 100%;
             height: 200px;
@@ -162,7 +167,6 @@
             margin-bottom: 15px;
         }
 
-        /* Durum Rozeti */
         .status-badge {
             display: inline-block;
             padding: 6px 20px;
@@ -181,7 +185,6 @@
             background: rgba(255, 68, 68, 0.1) !important;
         }
 
-        /* Modal / Rezervasyon Paneli */
         .modal {
             display: none;
             position: fixed;
@@ -203,6 +206,23 @@
             max-width: 450px;
             box-shadow: 0 0 50px rgba(57, 255, 20, 0.2);
             position: relative;
+        }
+
+        /* Aktif WA nömrəsi göstəricisi */
+        .wa-indicator {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .wa-indicator span {
+            color: var(--neon-green);
         }
 
         .form-group {
@@ -230,7 +250,6 @@
             font-size: 1rem;
         }
 
-        /* Rezervasyon Butonları */
         .btn-reserve {
             background: var(--neon-green);
             color: black;
@@ -269,17 +288,15 @@
             border-radius: 10px;
         }
 
-        /* Animasyonlar */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobil Duyarlılık Düzenlemeleri */
         @media (max-width: 600px) {
-            h1 { 
-                font-size: 2.2rem;   /* Mobilde yazı boyutu */
-                letter-spacing: 2px; /* Taşmayı önlemek için harf arası daraltıldı */
+            h1 {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
                 padding-left: 2px;
             }
             .subtitle {
@@ -299,7 +316,10 @@
         <header>
             <h1>ARISTOKRAT</h1>
             <p class="subtitle">Premium Billiard & Lounge</p>
-            
+
+            <!-- Baku saati göstəricisi -->
+            <div class="baku-clock" id="bakuClock">🕐 BAKU: --:--</div>
+
             <div class="user-info">
                 <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." required>
             </div>
@@ -311,7 +331,7 @@
             <!-- Masa 1 -->
             <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard1.webp" alt="Masa 1"> <!-- Görsel yolunu buradan manuel düzenleyin -->
+                    <img src="billiard1.webp" alt="Masa 1">
                 </div>
                 <div class="card-content">
                     <h3>Masa 1</h3>
@@ -324,7 +344,7 @@
             <!-- Masa 2 -->
             <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard2.webp" alt="Masa 2"> <!-- Görsel yolunu buradan manuel düzenleyin -->
+                    <img src="billiard2.webp" alt="Masa 2">
                 </div>
                 <div class="card-content">
                     <h3>Masa 2</h3>
@@ -337,7 +357,7 @@
             <!-- Masa 3 -->
             <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard3.webp" alt="Masa 3"> <!-- Görsel yolunu buradan manuel düzenleyin -->
+                    <img src="billiard3.webp" alt="Masa 3">
                 </div>
                 <div class="card-content">
                     <h3>Masa 3</h3>
@@ -350,7 +370,7 @@
             <!-- Masa 4 -->
             <div class="table-card" onclick="openModal('Masa 4 (Amerikan Pool)')">
                 <div class="card-image">
-                    <img src="billiard4.jpg" alt="Masa 4"> <!-- Görsel yolunu buradan manuel düzenleyin -->
+                    <img src="billiard4.jpg" alt="Masa 4">
                 </div>
                 <div class="card-content">
                     <h3>Masa 4</h3>
@@ -363,7 +383,7 @@
             <!-- Tennis -->
             <div class="table-card" onclick="openModal('Tennis 1')">
                 <div class="card-image">
-                    <img src="tennis.jpg" alt="Tennis 1"> <!-- Görsel yolunu buradan manuel düzenleyin -->
+                    <img src="tennis.jpg" alt="Tennis 1">
                 </div>
                 <div class="card-content">
                     <h3>Tennis 1</h3>
@@ -379,8 +399,13 @@
     <div id="resModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 25px; text-transform: uppercase;">Rezervasiya</h2>
-            
+            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 15px; text-transform: uppercase;">Rezervasiya</h2>
+
+            <!-- Aktiv WhatsApp nömrəsi göstəricisi -->
+            <div class="wa-indicator" id="waIndicator">
+                📲 Mesaj göndəriləcək: <span id="waNumberDisplay">yüklənir...</span>
+            </div>
+
             <div class="form-group">
                 <label>Başlanğıc Saatı (09:00 - 00:00)</label>
                 <input type="time" id="startTime" min="09:00" max="23:59" value="20:00">
@@ -411,136 +436,216 @@
     </div>
 
     <script>
+        // ─── WHATSAPP NÖMRƏLƏRI ───────────────────────────────────────────────
+        // 19:00-dan əvvəl bu nömrəyə göndərilir (gündüz)
+        const WA_DAY   = '994515525200';   // <-- buraya gündüz nömrəsini yazın
+
+        // 19:00-dan sonra bu nömrəyə göndərilir (gecə)
+        const WA_NIGHT = '994554828424';   // <-- gecə nömrəsi
+
+        // ─── BAKU SAATI (UTC+4) ──────────────────────────────────────────────
+        function getBakuTime() {
+            const now = new Date();
+            const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+            return new Date(utcMs + 4 * 3600000); // UTC+4
+        }
+
+        function getBakuDateString() {
+            const b = getBakuTime();
+            return b.getFullYear() + '-' +
+                   String(b.getMonth() + 1).padStart(2, '0') + '-' +
+                   String(b.getDate()).padStart(2, '0');
+        }
+
+        // Aktiv nömrəni seç (Baku saatına görə)
+        function getActiveWA() {
+            const bakuHour = getBakuTime().getHours();
+            return bakuHour < 19 ? WA_DAY : WA_NIGHT;
+        }
+
+        // ─── GÜNDƏLİK SIFIRLANMA (Baku 24:00) ───────────────────────────────
+        function checkDailyReset() {
+            const todayBaku = getBakuDateString();
+            const storedDate = localStorage.getItem('billiard_last_date');
+
+            if (storedDate !== todayBaku) {
+                // Yeni gün: rezervasiyaları sıfırla
+                localStorage.removeItem('billiard_reservations');
+                localStorage.setItem('billiard_last_date', todayBaku);
+                return true; // sıfırlandı
+            }
+            return false;
+        }
+
+        // ─── STATE ────────────────────────────────────────────────────────────
         let selectedTable = "";
+        checkDailyReset();
         let reservations = JSON.parse(localStorage.getItem('billiard_reservations')) || [];
 
-        // Masalar bölümüne kaydır
+        // ─── SAAT GÖSTƏRİCİSİ ────────────────────────────────────────────────
+        function updateClock() {
+            const b = getBakuTime();
+            const hh = String(b.getHours()).padStart(2, '0');
+            const mm = String(b.getMinutes()).padStart(2, '0');
+            const ss = String(b.getSeconds()).padStart(2, '0');
+            document.getElementById('bakuClock').textContent = '🕐 BAKU: ' + hh + ':' + mm + ':' + ss;
+
+            // Gecə yarısı sıfırlanma — saniyə dəqiqliyi ilə
+            if (hh === '00' && mm === '00' && ss === '00') {
+                if (checkDailyReset()) {
+                    reservations = [];
+                    updateUI();
+                }
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ─── KÖMƏKÇI FUNKSİYALAR ─────────────────────────────────────────────
         function scrollToTables() {
             document.getElementById('tables-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Modalı Aç
-        function openModal(tableName) {
-            const name = document.getElementById('customerName').value.trim();
-            if (!name) {
-                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
-                window.scrollTo({top: 0, behavior: 'smooth'});
-                return;
-            }
-            selectedTable = tableName;
-            document.getElementById('modalTitle').innerText = tableName;
-            document.getElementById('resModal').style.display = 'flex';
-        }
-
-        // Modalı Kapat
-        function closeModal() {
-            document.getElementById('resModal').style.display = 'none';
-        }
-
-        // Zaman Dönüştürücüler
         function timeToMinutes(timeStr) {
             const [h, m] = timeStr.split(':').map(Number);
             return h * 60 + m;
         }
 
         function minutesToTime(totalMinutes) {
-            let h = Math.floor(totalMinutes / 60) % 24;
-            let m = totalMinutes % 60;
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            const h = Math.floor(totalMinutes / 60) % 24;
+            const m = totalMinutes % 60;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
         }
 
-        // Çakışma Kontrolü
         function checkConflict(tableName, startMins, endMins) {
             return reservations.some(res => {
                 if (res.table !== tableName) return false;
                 const resStart = timeToMinutes(res.start);
-                const resEnd = timeToMinutes(res.end);
-                // Çakışma mantığı: (Start1 < End2) ve (End1 > Start2)
+                const resEnd   = timeToMinutes(res.end);
                 return (startMins < resEnd && endMins > resStart);
             });
         }
 
-        // Rezervasyonu Tamamla ve WhatsApp'a Gönder
+        // ─── MODAL AÇ ─────────────────────────────────────────────────────────
+        function openModal(tableName) {
+            const name = document.getElementById('customerName').value.trim();
+            if (!name) {
+                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            selectedTable = tableName;
+            document.getElementById('modalTitle').innerText = tableName;
+
+            // Aktiv WA nömrəsini göstər
+            const activeWA = getActiveWA();
+            const bakuHour = getBakuTime().getHours();
+            const session  = bakuHour < 19 ? 'Gündüz (09:00–19:00)' : 'Gecə (19:00–00:00)';
+            document.getElementById('waNumberDisplay').textContent = '+' + activeWA + ' · ' + session;
+
+            document.getElementById('resModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('resModal').style.display = 'none';
+        }
+
+        // ─── REZERVASİYANI TAMAMLA ────────────────────────────────────────────
         function completeReservation() {
-            const name = document.getElementById('customerName').value;
-            const start = document.getElementById('startTime').value;
+            const name   = document.getElementById('customerName').value.trim();
+            const start  = document.getElementById('startTime').value;
             const dHours = parseInt(document.getElementById('durationHours').value);
-            const dMins = parseInt(document.getElementById('durationMinutes').value);
-            
-            if (!start) return alert("Zəhmət olmasa saat seçin!");
+            const dMins  = parseInt(document.getElementById('durationMinutes').value);
 
-            const startTotalMins = timeToMinutes(start);
-            const durationTotalMins = (dHours * 60) + dMins;
-            const endTotalMins = startTotalMins + durationTotalMins;
-            const end = minutesToTime(endTotalMins);
+            if (!start) { alert("Zəhmət olmasa saat seçin!"); return; }
 
-            // İş saatleri kontrolü
-            if (startTotalMins < 540) { // 09:00 altı
+            const startTotalMins    = timeToMinutes(start);
+            const durationTotalMins = dHours * 60 + dMins;
+            const endTotalMins      = startTotalMins + durationTotalMins;
+            const end               = minutesToTime(endTotalMins);
+
+            // İş saatları yoxlaması
+            if (startTotalMins < 9 * 60) {
                 alert("Müəssisə saat 09:00-da açılır.");
                 return;
             }
+            if (endTotalMins > 24 * 60) {
+                alert("Bitmə saatı 00:00-ı keçə bilməz. Müddəti azaldın.");
+                return;
+            }
 
+            // Üst-üstə düşmə yoxlaması
             if (checkConflict(selectedTable, startTotalMins, endTotalMins)) {
                 alert("Bu vaxt aralığı artıq doludur! Zəhmət olmasa başqa vaxt seçin.");
                 return;
             }
 
+            const durStr = dHours + ' saat ' + dMins + ' dəq';
+
             const newReservation = {
-                customer: name,
-                table: selectedTable,
-                start: start,
-                duration: `${dHours} saat ${dMins} dəq`,
-                end: end
+                customer : name,
+                table    : selectedTable,
+                start    : start,
+                duration : durStr,
+                end      : end
             };
 
-            // Kaydet
             reservations.push(newReservation);
             localStorage.setItem('billiard_reservations', JSON.stringify(reservations));
 
-            // WhatsApp Mesajı Oluştur
-            const msg = `Salam, ${selectedTable} üçün rezervasiya etmək istəyirəm.%0AAd: ${name}%0ABaşlanğıc: ${start}%0AMüddət: ${newReservation.duration}%0ABitiş: ${end}`;
-            window.open(`https://wa.me/994554828424?text=${msg}`, '_blank');
+            // ─── WHATSAPP YÖNLƏNDİRMƏ (Baku saatına görə) ───────────────────
+            // 19:00-dan əvvəl  → WA_DAY nömrəsinə
+            // 19:00-dan sonra  → WA_NIGHT nömrəsinə
+            const targetWA = getActiveWA();
+
+            const msg = encodeURIComponent(
+                'Salam, ' + selectedTable + ' üçün rezervasiya etmək istəyirəm.\n' +
+                'Ad: ' + name + '\n' +
+                'Başlanğıc: ' + start + '\n' +
+                'Müddət: ' + durStr + '\n' +
+                'Bitiş: ' + end
+            );
+
+            window.open('https://wa.me/' + targetWA + '?text=' + msg, '_blank');
 
             updateUI();
             closeModal();
         }
 
-        // Arayüzü Güncelle (Dolu Masaları Göster)
+        // ─── UI YENİLƏNMƏSİ ──────────────────────────────────────────────────
         function updateUI() {
-            // Statüleri sıfırla
             document.querySelectorAll('.status-badge').forEach(el => {
                 el.innerText = "Mövcuddur";
                 el.classList.remove('occupied');
             });
-            document.querySelectorAll('.timeline').forEach(el => el.innerText = "");
+            document.querySelectorAll('.timeline').forEach(el => el.innerHTML = "");
 
-            // Mevcut rezervasyonları işle
             reservations.forEach(res => {
-                // ID eşleştirme (Masa 1 -> Masa-1)
-                const cleanId = res.table.includes('Tennis') ? 'Tennis-1' : `Masa-${res.table.match(/\d+/)}`;
-                
-                const statusEl = document.getElementById(`status-${cleanId}`);
-                const timeEl = document.getElementById(`time-${cleanId}`);
+                const cleanId  = res.table.includes('Tennis')
+                    ? 'Tennis-1'
+                    : 'Masa-' + res.table.match(/\d+/)[0];
+
+                const statusEl = document.getElementById('status-' + cleanId);
+                const timeEl   = document.getElementById('time-'   + cleanId);
 
                 if (statusEl) {
                     statusEl.innerText = "REZERV OLUNUB";
                     statusEl.classList.add('occupied');
                 }
                 if (timeEl) {
-                    const timeDiv = document.createElement('div');
-                    timeDiv.innerText = `${res.start} - ${res.end}`;
-                    timeEl.appendChild(timeDiv);
+                    const d   = document.createElement('div');
+                    d.innerText = res.start + ' – ' + res.end + ' (' + res.customer + ')';
+                    timeEl.appendChild(d);
                 }
             });
         }
 
-        // Sayfa açıldığında verileri yükle
+        // ─── BAŞLANĞIC ────────────────────────────────────────────────────────
         window.onload = updateUI;
 
-        // Modal dışına tıklandığında kapat
         window.onclick = function(e) {
-            if (e.target == document.getElementById('resModal')) closeModal();
-        }
+            if (e.target === document.getElementById('resModal')) closeModal();
+        };
     </script>
 </body>
 </html>
