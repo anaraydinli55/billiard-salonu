@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aristokrat | Premium Billiard Lounge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --dark-bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(57, 255, 20, 0.2);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a3a12 0%, #050505 80%);
+            min-height: 100vh;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=2070') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: -1;
+            filter: grayscale(100%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center; }
+
+        header { padding: 3rem 0; animation: fadeInDown 1s ease; }
+
+        h1 {
+            font-size: clamp(2rem, 10vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            padding-left: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .subtitle {
+            color: var(--neon-green);
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .baku-clock {
+            display: inline-block;
+            background: rgba(57, 255, 20, 0.08);
+            border: 1px solid rgba(57, 255, 20, 0.25);
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-info { margin-bottom: 3rem; }
+
+        .user-info input {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 18px 30px;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+            text-align: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-info input:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: var(--neon-green);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(57,255,20,0.2);
+        }
+
+        .card-image { width: 100%; height: 200px; overflow: hidden; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .card-content { padding: 20px; }
+        .table-card h3 { margin-bottom: 5px; font-size: 1.6rem; letter-spacing: 1px; }
+        .table-card p { font-size: 0.85rem; opacity: 0.6; color: var(--neon-green); margin-bottom: 15px; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: rgba(57,255,20,0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .occupied {
+            border-color: #ff4444 !important;
+            color: #ff4444 !important;
+            background: rgba(255,68,68,0.1) !important;
+        }
+
+        /* ── REZERVASIYA MODAL ── */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #0a0a0a;
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--neon-green);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 0 50px rgba(57,255,20,0.2);
+            position: relative;
+        }
+
+        .wa-indicator {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+        .wa-indicator span { color: var(--neon-green); }
+
+        .form-group { margin-bottom: 25px; text-align: left; }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--neon-green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        select, input[type="time"] {
+            width: 100%;
+            padding: 15px;
+            background: #151515;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 12px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .btn-reserve {
+            background: var(--neon-green);
+            color: black;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(57,255,20,0.4);
+            transition: var(--transition);
+        }
+        .btn-reserve:hover { transform: scale(1.02); box-shadow: 0 0 35px var(--neon-green); }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 25px;
+            cursor: pointer;
+            font-size: 2rem;
+            color: #555;
+            transition: color 0.2s;
+        }
+        .close-modal:hover { color: #ff4444; }
+
+        .timeline {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: #aaa;
+            background: rgba(0,0,0,0.3);
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        /* ── TƏSDİQ KODU PANEL ── */
+        #confirmPanel {
+            display: none;
+            margin-top: 20px;
+            padding: 22px;
+            background: rgba(57,255,20,0.04);
+            border: 1px solid rgba(57,255,20,0.3);
+            border-radius: 16px;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        #confirmPanel .confirm-title {
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        #confirmPanel .confirm-desc {
+            font-size: 0.78rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        #confirmPanel .confirm-desc b { color: white; }
+
+        /* Geri sayım */
+        .countdown-bar-wrap {
+            background: #1a1a1a;
+            border-radius: 30px;
+            height: 6px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+        .countdown-bar {
+            height: 100%;
+            background: var(--neon-green);
+            border-radius: 30px;
+            width: 100%;
+            transition: width 1s linear, background 1s linear;
+        }
+
+        .countdown-text {
+            font-size: 0.72rem;
+            color: #666;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+        }
+        .countdown-text span { color: var(--neon-green); font-weight: 700; }
+
+        /* Kod input */
+        .code-input-wrap { display: flex; gap: 8px; justify-content: center; margin-bottom: 14px; }
+
+        .code-digit {
+            width: 42px; height: 52px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            caret-color: var(--neon-green);
+        }
+        .code-digit:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 12px rgba(57,255,20,0.35);
+        }
+        .code-digit.error { border-color: #ff4444 !important; animation: shake 0.4s ease; }
+        .code-digit.success { border-color: var(--neon-green) !important; background: rgba(57,255,20,0.1); }
+
+        .error-msg {
+            font-size: 0.75rem;
+            color: #ff4444;
+            min-height: 18px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-verify {
+            background: var(--neon-green);
+            color: black;
+            border: none;
+            padding: 13px 28px;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            box-shadow: 0 0 15px rgba(57,255,20,0.3);
+            transition: var(--transition);
+        }
+        .btn-verify:hover { transform: scale(1.02); box-shadow: 0 0 25px var(--neon-green); }
+
+        .btn-resend {
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            padding: 9px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            margin-top: 10px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-resend:hover { border-color: var(--neon-green); color: var(--neon-green); }
+
+        /* Uğur animasiyası */
+        .success-flash {
+            position: fixed;
+            inset: 0;
+            background: rgba(57,255,20,0.06);
+            pointer-events: none;
+            z-index: 9999;
+            animation: successFlash 0.8s ease forwards;
+        }
+
+        @keyframes successFlash {
+            0%   { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25%      { transform: translateX(-6px); }
+            75%      { transform: translateX(6px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; letter-spacing: 2px; padding-left: 2px; }
+            .subtitle { font-size: 0.75rem; letter-spacing: 2px; }
+            .container { padding: 1rem 0.5rem; }
+            .modal-content { padding: 30px 20px; }
+            .code-digit { width: 36px; height: 46px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-overlay"></div>
+
+<div class="container">
+    <header>
+        <h1>ARISTOKRAT</h1>
+        <p class="subtitle">Premium Billiard & Lounge</p>
+        <div class="baku-clock" id="bakuClock">🕐 BAKU: --:--</div>
+        <div class="user-info">
+            <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." required>
+        </div>
+        <button class="btn-reserve" onclick="scrollToTables()" style="width:auto;padding:18px 50px;">REZERV EDİN</button>
+    </header>
+
+    <div id="tables-section" class="tables-grid">
+
+        <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
+            <div class="card-image"><img src="billiard1.webp" alt="Masa 1"></div>
+            <div class="card-content">
+                <h3>Masa 1</h3><p>Rus Bilyardı</p>
+                <div id="status-Masa-1" class="status-badge">Mövcuddur</div>
+                <div id="time-Masa-1" class="timeline"></div>
+            </div>
+        </div>
+
+        <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
+            <div class="card-image"><img src="billiard2.webp" alt="Masa 2"></div>
+            <div class="card-content">
+                <h3>Masa 2</h3><p>Rus Bilyardı</p>
+                <div id="status-Masa-2" class="status-badge">Mövcuddur</div>
+                <div id="time-Masa-2" class="timeline"></div>
+            </div>
+        </div>
+
+        <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
+            <div class="card-image"><img src="billiard3.webp" alt="Masa 3"></div>
+            <div class="card-content">
+                <h3>Masa 3</h3><p>Rus Bilyardı</p>
+                <div id="status-Masa-3" class="status-badge">Mövcuddur</div>
+                <div id="time-Masa-3" class="timeline"></div>
+            </div>
+        </div>
+
+        <div class="table-card" onclick="openModal('Masa 4 (Amerikan Pool)')">
+            <div class="card-image"><img src="billiard4.jpg" alt="Masa 4"></div>
+            <div class="card-content">
+                <h3>Masa 4</h3><p>Amerikan Pool</p>
+                <div id="status-Masa-4" class="status-badge">Mövcuddur</div>
+                <div id="time-Masa-4" class="timeline"></div>
+            </div>
+        </div>
+
+        <div class="table-card" onclick="openModal('Tennis 1')">
+            <div class="card-image"><img src="tennis.jpg" alt="Tennis 1"></div>
+            <div class="card-content">
+                <h3>Tennis 1</h3><p>Masa Tennisi</p>
+                <div id="status-Tennis-1" class="status-badge">Mövcuddur</div>
+                <div id="time-Tennis-1" class="timeline"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ── REZERVASIYA MODAL ── -->
+<div id="resModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle" style="color:var(--neon-green);margin-bottom:15px;text-transform:uppercase;">Rezervasiya</h2>
+
+        <div class="wa-indicator">
+            📲 Mesaj göndəriləcək: <span id="waNumberDisplay">yüklənir...</span>
+        </div>
+
+        <!-- FORM -->
+        <div id="bookingForm">
+            <div class="form-group">
+                <label>Başlanğıc Saatı (09:00 – 00:00)</label>
+                <input type="time" id="startTime" min="09:00" max="23:59" value="20:00">
+            </div>
+            <div class="form-group">
+                <label>Müddət (Saat)</label>
+                <select id="durationHours">
+                    <option value="1">1 Saat</option>
+                    <option value="2">2 Saat</option>
+                    <option value="3">3 Saat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Əlavə Dəqiqə</label>
+                <select id="durationMinutes">
+                    <option value="10" selected>10 dəqiqə</option>
+                    <option value="20">20 dəqiqə</option>
+                    <option value="30">30 dəqiqə</option>
+                    <option value="40">40 dəqiqə</option>
+                    <option value="50">50 dəqiqə</option>
+                </select>
+            </div>
+            <button class="btn-reserve" onclick="initiateReservation()">WhatsApp ilə Rezerv Et →</button>
+        </div>
+
+        <!-- TƏSDİQ KODU PANEL -->
+        <div id="confirmPanel">
+            <div class="confirm-title">📲 Kodu Daxil Edin</div>
+            <div class="confirm-desc">
+                WhatsApp mesajı açıldı.<br>
+                Mesajı <b>göndərin</b>, sonra mesajın sonundakı<br>
+                <b>6 rəqəmli təsdiq kodunu</b> aşağıya yazın.
+            </div>
+
+            <div class="countdown-bar-wrap">
+                <div class="countdown-bar" id="countdownBar"></div>
+            </div>
+            <div class="countdown-text">Vaxt: <span id="countdownText">05:00</span></div>
+
+            <div class="code-input-wrap" id="codeInputWrap">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d0" oninput="moveNext(this,0)" onkeydown="movePrev(event,0)">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" oninput="moveNext(this,1)" onkeydown="movePrev(event,1)">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" oninput="moveNext(this,2)" onkeydown="movePrev(event,2)">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" oninput="moveNext(this,3)" onkeydown="movePrev(event,3)">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" oninput="moveNext(this,4)" onkeydown="movePrev(event,4)">
+                <input class="code-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d5" oninput="moveNext(this,5)" onkeydown="movePrev(event,5)">
+            </div>
+
+            <div class="error-msg" id="codeError"></div>
+
+            <button class="btn-verify" onclick="verifyCode()">✓ Kodu Təsdiqlə</button>
+            <button class="btn-resend" onclick="resendWhatsApp()">↺ WhatsApp-ı Yenidən Aç</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ─── NÖMRƏLƏR ─────────────────────────────────────────────────────────────
+    const WA_DAY   = '994554828424';   // gündüz nömrəsi (09:00–18:59)
+    const WA_NIGHT = '994554828424';   // gecə nömrəsi  (19:00–00:00)
+
+    // ─── BAKU SAATI ───────────────────────────────────────────────────────────
+    function getBakuTime() {
+        const now = new Date();
+        return new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 4 * 3600000);
+    }
+
+    function getBakuDateStr() {
+        const b = getBakuTime();
+        return b.getFullYear() + '-' +
+               String(b.getMonth()+1).padStart(2,'0') + '-' +
+               String(b.getDate()).padStart(2,'0');
+    }
+
+    function getActiveWA() {
+        return getBakuTime().getHours() < 19 ? WA_DAY : WA_NIGHT;
+    }
+
+    // ─── GÜNDƏLİK SIFIRLANMA ─────────────────────────────────────────────────
+    function checkDailyReset() {
+        const today = getBakuDateStr();
+        if (localStorage.getItem('billiard_last_date') !== today) {
+            localStorage.removeItem('billiard_reservations');
+            localStorage.setItem('billiard_last_date', today);
+        }
+    }
+
+    // ─── STATE ────────────────────────────────────────────────────────────────
+    checkDailyReset();
+    let reservations   = JSON.parse(localStorage.getItem('billiard_reservations')) || [];
+    let selectedTable  = '';
+    let pendingData    = null;   // aktiv gözlənilən rezervasiya
+    let countdownTimer = null;
+    let confirmCode    = '';
+    const CODE_TIMEOUT = 5 * 60; // 5 dəqiqə (saniyə)
+    let remainingSecs  = CODE_TIMEOUT;
+
+    // ─── SAAT ─────────────────────────────────────────────────────────────────
+    function updateClock() {
+        const b = getBakuTime();
+        const hh = String(b.getHours()).padStart(2,'0');
+        const mm = String(b.getMinutes()).padStart(2,'0');
+        const ss = String(b.getSeconds()).padStart(2,'0');
+        document.getElementById('bakuClock').textContent = '🕐 BAKU: ' + hh + ':' + mm + ':' + ss;
+        if (hh === '00' && mm === '00' && ss === '00') {
+            checkDailyReset();
+            reservations = [];
+            updateUI();
+        }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ─── YARDIMÇI ─────────────────────────────────────────────────────────────
+    function scrollToTables() {
+        document.getElementById('tables-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function timeToMins(t) {
+        const [h,m] = t.split(':').map(Number);
+        return h*60+m;
+    }
+
+    function minsToTime(n) {
+        return String(Math.floor(n/60)%24).padStart(2,'0') + ':' + String(n%60).padStart(2,'0');
+    }
+
+    function generateCode() {
+        return String(Math.floor(100000 + Math.random() * 900000));
+    }
+
+    function checkConflict(table, s, e) {
+        return reservations.some(r => {
+            if (r.table !== table) return false;
+            const rs = timeToMins(r.start), re = timeToMins(r.end);
+            return (s < re && e > rs);
+        });
+    }
+
+    // ─── MODAL AÇ / BAğLA ─────────────────────────────────────────────────────
+    function openModal(tableName) {
+        const name = document.getElementById('customerName').value.trim();
+        if (!name) {
+            alert('Zəhmət olmasa əvvəlcə adınızı daxil edin!');
+            window.scrollTo({top:0,behavior:'smooth'});
+            return;
+        }
+        selectedTable = tableName;
+        document.getElementById('modalTitle').innerText = tableName;
+
+        const bh = getBakuTime().getHours();
+        const session = bh < 19 ? 'Gündüz (12:00–19:00)' : 'Gecə (19:00–00:00)';
+        document.getElementById('waNumberDisplay').textContent = '+' + getActiveWA() + ' · ' + session;
+
+        // Formu göstər, kodu gizlə
+        showForm();
+        clearCodeInputs();
+        document.getElementById('codeError').textContent = '';
+        document.getElementById('resModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('resModal').style.display = 'none';
+        stopCountdown();
+        pendingData = null;
+    }
+
+    function showForm() {
+        document.getElementById('bookingForm').style.display = 'block';
+        document.getElementById('confirmPanel').style.display = 'none';
+    }
+
+    function showConfirmPanel() {
+        document.getElementById('bookingForm').style.display = 'none';
+        document.getElementById('confirmPanel').style.display = 'block';
+        setTimeout(() => document.getElementById('d0').focus(), 200);
+    }
+
+    // ─── REZERVASIYA BAŞLAT (1-ci addım) ─────────────────────────────────────
+    function initiateReservation() {
+        const name   = document.getElementById('customerName').value.trim();
+        const start  = document.getElementById('startTime').value;
+        const dHours = parseInt(document.getElementById('durationHours').value);
+        const dMins  = parseInt(document.getElementById('durationMinutes').value);
+
+        if (!start) { alert('Saat seçin!'); return; }
+
+        const startM = timeToMins(start);
+        const durM   = dHours*60 + dMins;
+        const endM   = startM + durM;
+        const end    = minsToTime(endM);
+
+        if (startM < 9*60)   { alert('Müəssisə saat 09:00-da açılır.'); return; }
+        if (endM > 24*60)    { alert('Bitmə saatı 00:00-ı keçə bilməz.'); return; }
+        if (checkConflict(selectedTable, startM, endM)) {
+            alert('Bu vaxt artıq doludur! Başqa vaxt seçin.');
+            return;
+        }
+
+        // Gözlənilən rezervasiya - hələ yadda saxlanmır
+        confirmCode = generateCode();
+        pendingData = {
+            customer : name,
+            table    : selectedTable,
+            start    : start,
+            duration : dHours + ' saat ' + dMins + ' dəq',
+            end      : end,
+            waTarget : getActiveWA()
+        };
+
+        openWhatsApp();
+        showConfirmPanel();
+        startCountdown();
+    }
+
+    // ─── WHATSAPP AÇ ──────────────────────────────────────────────────────────
+    function openWhatsApp() {
+        if (!pendingData) return;
+        const d = pendingData;
+        const msg = encodeURIComponent(
+            'Salam, ' + d.table + ' üçün rezervasiya etmək istəyirəm.\n' +
+            'Ad: ' + d.customer + '\n' +
+            'Başlanğıc: ' + d.start + '\n' +
+            'Müddət: ' + d.duration + '\n' +
+            'Bitiş: ' + d.end + '\n' +
+            '─────────────────\n' +
+            'Təsdiq kodu: ' + confirmCode
+        );
+        window.open('https://wa.me/' + d.waTarget + '?text=' + msg, '_blank');
+    }
+
+    function resendWhatsApp() {
+        openWhatsApp();
+        document.getElementById('codeError').textContent = 'WhatsApp yenidən açıldı. Kodu göndərin.';
+    }
+
+    // ─── GERİ SAYIM ───────────────────────────────────────────────────────────
+    function startCountdown() {
+        stopCountdown();
+        remainingSecs = CODE_TIMEOUT;
+        updateCountdownUI();
+        countdownTimer = setInterval(() => {
+            remainingSecs--;
+            updateCountdownUI();
+            if (remainingSecs <= 0) {
+                stopCountdown();
+                expireCode();
+            }
+        }, 1000);
+    }
+
+    function stopCountdown() {
+        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    }
+
+    function updateCountdownUI() {
+        const pct = (remainingSecs / CODE_TIMEOUT) * 100;
+        const bar = document.getElementById('countdownBar');
+        bar.style.width = pct + '%';
+        // Rəng dəyişikliyi: yaşıl → sarı → qırmızı
+        if (pct > 50)      bar.style.background = 'var(--neon-green)';
+        else if (pct > 20) bar.style.background = '#ffcc00';
+        else               bar.style.background = '#ff4444';
+
+        const m = String(Math.floor(remainingSecs/60)).padStart(2,'0');
+        const s = String(remainingSecs%60).padStart(2,'0');
+        document.getElementById('countdownText').textContent = m + ':' + s;
+    }
+
+    function expireCode() {
+        pendingData   = null;
+        confirmCode   = '';
+        document.getElementById('codeError').textContent =
+            '⏱ Vaxt bitdi. Rezervasiya ləğv olundu. Yenidən cəhd edin.';
+        // Formu 2 san sonra yenidən göstər
+        setTimeout(() => { showForm(); closeModal(); }, 2000);
+    }
+
+    // ─── KOD DAXİL ETMƏ (6 xanaclı input) ───────────────────────────────────
+    function moveNext(el, idx) {
+        el.value = el.value.replace(/[^0-9]/g,'');
+        if (el.value && idx < 5) {
+            document.getElementById('d' + (idx+1)).focus();
+        }
+        // Son xana dolduqda avtomatik yoxla
+        if (idx === 5 && el.value) verifyCode();
+    }
+
+    function movePrev(e, idx) {
+        if (e.key === 'Backspace' && !document.getElementById('d'+idx).value && idx > 0) {
+            document.getElementById('d'+(idx-1)).focus();
+        }
+    }
+
+    function getEnteredCode() {
+        let code = '';
+        for (let i = 0; i < 6; i++) code += document.getElementById('d'+i).value;
+        return code;
+    }
+
+    function clearCodeInputs() {
+        for (let i = 0; i < 6; i++) {
+            const el = document.getElementById('d'+i);
+            if (el) { el.value = ''; el.classList.remove('error','success'); }
+        }
+    }
+
+    function setCodeStyle(cls) {
+        for (let i = 0; i < 6; i++) {
+            const el = document.getElementById('d'+i);
+            if (el) { el.classList.remove('error','success'); if(cls) el.classList.add(cls); }
+        }
+    }
+
+    // ─── KOD TƏSDİQLƏ (2-ci addım) ───────────────────────────────────────────
+    function verifyCode() {
+        if (!pendingData) {
+            document.getElementById('codeError').textContent = 'Rezervasiya tapılmadı. Yenidən başlayın.';
+            return;
+        }
+
+        const entered = getEnteredCode();
+
+        if (entered.length < 6) {
+            document.getElementById('codeError').textContent = 'Zəhmət olmasa 6 rəqəmli kodu tam daxil edin.';
+            setCodeStyle('error');
+            return;
+        }
+
+        if (entered !== confirmCode) {
+            document.getElementById('codeError').textContent = '✗ Kod yanlışdır. Mesajdakı kodu yoxlayın.';
+            setCodeStyle('error');
+            clearCodeInputs();
+            setTimeout(() => document.getElementById('d0').focus(), 50);
+            return;
+        }
+
+        // ✓ KOD DOĞRU — rezervasiyanı yadda saxla
+        stopCountdown();
+        setCodeStyle('success');
+        document.getElementById('codeError').textContent = '';
+
+        reservations.push(pendingData);
+        localStorage.setItem('billiard_reservations', JSON.stringify(reservations));
+
+        pendingData  = null;
+        confirmCode  = '';
+
+        // Uğur effekti
+        const flash = document.createElement('div');
+        flash.className = 'success-flash';
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 900);
+
+        updateUI();
+
+        setTimeout(() => {
+            showForm();
+            closeModal();
+        }, 600);
+    }
+
+    // ─── UI YENİLƏNMƏSİ ──────────────────────────────────────────────────────
+    function updateUI() {
+        document.querySelectorAll('.status-badge').forEach(el => {
+            el.innerText = 'Mövcuddur';
+            el.classList.remove('occupied');
+        });
+        document.querySelectorAll('.timeline').forEach(el => el.innerHTML = '');
+
+        reservations.forEach(res => {
+            const cleanId  = res.table.includes('Tennis')
+                ? 'Tennis-1'
+                : 'Masa-' + res.table.match(/\d+/)[0];
+            const statusEl = document.getElementById('status-' + cleanId);
+            const timeEl   = document.getElementById('time-'   + cleanId);
+            if (statusEl) { statusEl.innerText = 'REZERV OLUNUB'; statusEl.classList.add('occupied'); }
+            if (timeEl) {
+                const d = document.createElement('div');
+                d.innerText = res.start + ' – ' + res.end + ' (' + res.customer + ')';
+                timeEl.appendChild(d);
+            }
+        });
+    }
+
+    window.onload = updateUI;
+
+    window.onclick = function(e) {
+        if (e.target === document.getElementById('resModal')) closeModal();
+    };
+</script>
+</body>
+</html>
