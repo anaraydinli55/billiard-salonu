@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -8,7 +7,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (Version 9 Compatibility) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -33,8 +32,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center; }
 
-        header { padding: 3rem 0; }
-
+        /* Header Neon */
         h1 {
             font-size: clamp(2rem, 10vw, 4rem);
             font-weight: 900;
@@ -52,7 +50,6 @@
             font-size: 0.8rem;
             text-shadow: 0 0 5px var(--neon-green);
             margin-bottom: 2.5rem;
-            opacity: 0.9;
         }
 
         .user-info input {
@@ -67,9 +64,7 @@
             outline: none;
             backdrop-filter: blur(10px);
             margin-bottom: 1.5rem;
-            transition: 0.3s;
         }
-        .user-info input:focus { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
 
         /* Tables Grid */
         .tables-grid {
@@ -92,12 +87,10 @@
         .table-card:hover { transform: translateY(-8px); border-color: var(--neon-green); }
 
         .card-image { width: 100%; height: 180px; overflow: hidden; background: #111; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.5s; }
-        .table-card:hover .card-image img { opacity: 1; transform: scale(1.05); }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
 
         .card-content { padding: 20px; }
-        .card-content h3 { font-size: 1.4rem; margin-bottom: 5px; letter-spacing: 1px; }
-        .card-content p { font-size: 0.8rem; color: var(--neon-green); margin-bottom: 15px; opacity: 0.8; }
+        .card-content h3 { font-size: 1.4rem; margin-bottom: 5px; }
 
         .status-badge {
             display: inline-block;
@@ -124,7 +117,7 @@
             margin-bottom: 6px;
             letter-spacing: 3px;
             font-weight: bold;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         .ad-card {
@@ -150,8 +143,6 @@
             font-size: 0.75rem;
             font-weight: bold;
             transition: 0.3s;
-            white-space: nowrap;
-            margin-left: 15px;
         }
         .btn-ad:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
 
@@ -164,34 +155,51 @@
 
         .footer-brand {
             color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-            font-size: 0.8rem;
-            letter-spacing: 5px;
+            text-shadow: 0 0 15px var(--neon-green);
+            font-size: 0.9rem;
+            letter-spacing: 6px;
             text-transform: uppercase;
             font-weight: 900;
+            cursor: pointer; /* Admin girişi üçün kliklənə bilər */
             margin-bottom: 10px;
         }
 
         .footer-copy {
-            color: rgba(57, 255, 20, 0.5);
+            color: rgba(57, 255, 20, 0.4);
             font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* Admin & Modal Stylleri (Eyni qaldı) */
-        .admin-trigger { margin-top: 30px; opacity: 0.3; cursor: pointer; font-size: 9px; color: #444; }
-        #adminPanel { display: none; background: #0a0a0a; border: 1px solid #222; margin-top: 20px; padding: 20px; border-radius: 15px; text-align: left; }
-        .res-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; font-size: 0.8rem; }
-        
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: #0a0a0a; padding: 30px; border: 1px solid var(--neon-green); border-radius: 20px; width: 90%; max-width: 400px; position: relative;}
-        .btn-main { background: var(--neon-green); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
-
-        @media (max-width: 600px) {
-            .ad-card { flex-direction: column; text-align: center; gap: 15px; }
-            .btn-ad { margin-left: 0; width: 100%; }
+        /* Admin Panel Section */
+        #adminPanel {
+            display: none;
+            background: #0a0a0a;
+            border: 1px solid var(--neon-green);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: left;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
         }
+
+        .res-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #111;
+            font-size: 0.85rem;
+        }
+
+        /* Modal Stylleri */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #0a0a0a; padding: 30px; border: 1px solid var(--neon-green); border-radius: 20px; width: 90%; max-width: 400px; }
+        .btn-main { background: var(--neon-green); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; text-transform: uppercase; }
+
+        /* Şifrə Modalı */
+        #loginModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -205,18 +213,17 @@
             </div>
         </header>
 
-        <!-- Masalar Grid -->
         <div class="tables-grid" id="tablesGrid">
-            <!-- Masalar JavaScript ilə bura dolacaq -->
+            <!-- Masalar JavaScript ilə dolur -->
         </div>
 
-        <!-- Viktoria Reklam Bölməsi -->
+        <!-- Viktoria Reklam -->
         <div class="ad-section">
             <p class="google-label">Google Reklam</p>
             <div class="ad-card">
                 <div>
                     <h2>Viktoria Paltar Boyaları</h2>
-                    <p>Geyimlərinizə yeni və parlaq həyat verin.</p>
+                    <p>Geyimlərinizə parlaq həyat verin.</p>
                 </div>
                 <a href="https://viktoria-az.store" target="_blank" class="btn-ad">SAYTA KEÇİD</a>
             </div>
@@ -224,13 +231,14 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <div class="footer-brand">ARISTOKRAT</div>
+            <!-- Admin Girişi: Bu yazıya 3 dəfə klikləyin -->
+            <div class="footer-brand" onclick="handleAdminClick()">ARISTOKRAT</div>
             <p class="footer-copy">Bütün haqları qorunur © 2026</p>
             
-            <div class="admin-trigger" onclick="toggleAdmin()">SİSTEM GİRİŞİ</div>
             <div id="adminPanel">
-                <h4 style="color: var(--neon-green); margin-bottom: 15px;">Admin İdarəetmə Paneli</h4>
+                <h3 style="color: var(--neon-green); margin-bottom: 15px; font-size: 1rem;">IDARƏETMƏ PANELI</h3>
                 <div id="adminList">Yüklənir...</div>
+                <button onclick="document.getElementById('adminPanel').style.display='none'" style="margin-top:15px; background:none; border:none; color:#555; cursor:pointer; font-size:0.7rem;">PANELİ GİZLƏ</button>
             </div>
         </footer>
     </div>
@@ -240,20 +248,29 @@
         <div class="modal-content">
             <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 15px; text-transform: uppercase;">Masa Seçin</h2>
             <div style="text-align: left;">
-                <label style="font-size: 0.8rem; color: #555;">BAŞLANĞIC SAATI</label>
-                <input type="time" id="startTime" value="20:00" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px; margin-top:5px;">
+                <label style="font-size: 0.7rem; color: #555;">BAŞLANĞIC SAATI</label>
+                <input type="time" id="startTime" value="20:00" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px;">
                 
-                <label style="display:block; margin-top:15px; font-size: 0.8rem; color: #555;">MÜDDƏT SEÇİN</label>
-                <select id="duration" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px; margin-top:5px;">
+                <label style="display:block; margin-top:15px; font-size: 0.7rem; color: #555;">MÜDDƏT</label>
+                <select id="duration" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px;">
                     <option value="60">1 Saat</option>
                     <option value="90">1 Saat 30 Dəq</option>
                     <option value="120">2 Saat</option>
                     <option value="180">3 Saat</option>
                 </select>
             </div>
-
             <button class="btn-main" onclick="requestReservation()">WhatsApp İlə Göndər</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; width:100%; font-size: 0.7rem;">LƏĞV ET</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; width:100%; font-size: 0.7rem;">BAĞLA</button>
+        </div>
+    </div>
+
+    <!-- Şifrə Giriş Modalı -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="border-color: var(--neon-green);">
+            <h3 style="color: var(--neon-green); margin-bottom: 15px;">SİSTEMƏ GİRİŞ</h3>
+            <input type="password" id="adminPass" placeholder="Şifrəni daxil edin" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px; text-align:center;">
+            <button class="btn-main" onclick="checkAdminPass()">DAXİL OL</button>
+            <button onclick="document.getElementById('loginModal').style.display='none'" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; width:100%; font-size: 0.7rem;">LƏĞV ET</button>
         </div>
     </div>
 
@@ -264,8 +281,8 @@
         const db = firebase.database();
 
         let selectedTableId = null;
-        
-        // Masa datası və real şəkil linkləri
+        let adminClickCount = 0;
+
         const tables = [
             { id: 1, name: "Masa 1", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=500" },
             { id: 2, name: "Masa 2", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=500" },
@@ -274,87 +291,85 @@
             { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "https://images.unsplash.com/photo-1534158914592-062992fbe900?q=80&w=500" }
         ];
 
-        // --- İLK RENDER (Firebase gözləmədən) ---
+        // --- İLK RENDER ---
         function initialRender() {
             const grid = document.getElementById('tablesGrid');
             grid.innerHTML = tables.map(t => `
-                <div class="table-card" id="card-${t.id}" onclick="openModal(${t.id}, '${t.name}')">
-                    <div class="card-image"><img src="${t.img}" alt="${t.name}"></div>
+                <div class="table-card" onclick="openModal(${t.id}, '${t.name}')">
+                    <div class="card-image"><img src="${t.img}"></div>
                     <div class="card-content">
                         <h3>${t.name}</h3>
                         <p>${t.type}</p>
-                        <div id="status-container-${t.id}">
-                            <span class="status-badge">Mövcuddur</span>
-                        </div>
+                        <div id="status-${t.id}"><span class="status-badge">Mövcuddur</span></div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- STATUSLARI YENİLƏ ---
-        function updateStatuses(resData) {
+        // --- REAL-TIME UPDATE ---
+        db.ref('reservations').on('value', (snapshot) => {
+            const data = snapshot.val();
+            updateUI(data);
+            renderAdminList(data);
+        });
+
+        function updateUI(resData) {
             tables.forEach(t => {
-                const container = document.getElementById(`status-container-${t.id}`);
-                const activeRes = Object.values(resData || {}).find(r => r.tableId === t.id && r.status !== 'expired');
-                
-                if (activeRes) {
-                    if (activeRes.status === 'confirmed') {
-                        container.innerHTML = `<span class="status-badge status-confirmed">DOLUDUR: ${activeRes.start}-${activeRes.end}</span>`;
-                    } else {
-                        container.innerHTML = `<span class="status-badge status-pending">Təsdiq Gözlənilir</span>`;
-                    }
+                const container = document.getElementById(`status-${t.id}`);
+                const active = Object.values(resData || {}).find(r => r.tableId === t.id);
+                if(active) {
+                    if(active.status === 'confirmed') container.innerHTML = `<span class="status-badge status-confirmed">DOLUDUR: ${active.start}-${active.end}</span>`;
+                    else container.innerHTML = `<span class="status-badge status-pending">Təsdiq Gözlənilir</span>`;
                 } else {
                     container.innerHTML = `<span class="status-badge">Mövcuddur</span>`;
                 }
             });
         }
 
-        // Real-time Firebase Dinləyicisi
-        db.ref('reservations').on('value', (snapshot) => {
-            const data = snapshot.val();
-            updateStatuses(data);
-            renderAdminList(data);
-        });
-
-        // --- MODAL & REZERV ---
+        // --- MODAL ---
         function openModal(id, name) {
-            const customer = document.getElementById('customerName').value.trim();
-            if(!customer) {
-                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
-                window.scrollTo({top: 0, behavior: 'smooth'});
-                return;
-            }
+            if(!document.getElementById('customerName').value) return alert("Adınızı yazın!");
             selectedTableId = id;
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('resModal').style.display = 'flex';
         }
-
         function closeModal() { document.getElementById('resModal').style.display = 'none'; }
 
         function requestReservation() {
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
             const dur = document.getElementById('duration').value;
-            
             let [h, m] = start.split(':').map(Number);
             let totalMins = h * 60 + m + parseInt(dur);
             let end = Math.floor(totalMins/60).toString().padStart(2,'0') + ":" + (totalMins%60).toString().padStart(2,'0');
 
             const resId = Date.now();
+            db.ref('reservations/' + resId).set({ id: resId, customer: name, tableId: selectedTableId, start, end, status: 'pending' });
 
-            db.ref('reservations/' + resId).set({
-                id: resId, customer: name, tableId: selectedTableId, start: start, end: end, status: 'pending'
-            });
-
-            const waMsg = `Salam, Aristokrat! %0A${selectedTableId}-ci masanı rezerv etmək istəyirəm. %0AAd: ${name} %0ASaat: ${start} - ${end}`;
-            window.open(`https://wa.me/994554828424?text=${waMsg}`, '_blank');
-            
+            window.open(`https://wa.me/994554828424?text=Rezerv Sorğusu: ${name}, Masa ${selectedTableId}, ${start}-${end}`, '_blank');
             closeModal();
         }
 
-        // --- ADMIN ---
-        function toggleAdmin() {
-            if(prompt("Şifrə:") === "2026") document.getElementById('adminPanel').style.display = 'block';
+        // --- ADMIN GİRİŞ MƏNTİQİ ---
+        function handleAdminClick() {
+            adminClickCount++;
+            if(adminClickCount === 3) {
+                document.getElementById('loginModal').style.display = 'flex';
+                adminClickCount = 0;
+            }
+            setTimeout(() => { adminClickCount = 0; }, 2000); // 2 saniyə ərzində 3 klik olmazsa sıfırla
+        }
+
+        function checkAdminPass() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === "2026") {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('adminPass').value = '';
+                document.getElementById('adminPanel').scrollIntoView({behavior:'smooth'});
+            } else {
+                alert("Səhv şifrə!");
+            }
         }
 
         function renderAdminList(data) {
@@ -364,14 +379,13 @@
                 <div class="res-item">
                     <span>Masa ${r.tableId}: ${r.customer} (${r.start}-${r.end})</span>
                     <div>
-                        <button onclick="db.ref('reservations/${r.id}').update({status:'confirmed'})" style="color:lime; background:none; border:none; cursor:pointer;">[Təsdiq]</button>
-                        <button onclick="db.ref('reservations/${r.id}').remove()" style="color:red; background:none; border:none; cursor:pointer; margin-left:10px;">[Sil]</button>
+                        <button onclick="db.ref('reservations/${r.id}').update({status:'confirmed'})" style="color:lime; background:none; border:1px solid lime; padding:2px 8px; border-radius:5px; cursor:pointer; font-size:0.7rem;">OK</button>
+                        <button onclick="db.ref('reservations/${r.id}').remove()" style="color:red; background:none; border:1px solid red; padding:2px 8px; border-radius:5px; cursor:pointer; font-size:0.7rem; margin-left:5px;">SİL</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Başlat
         initialRender();
     </script>
 </body>
