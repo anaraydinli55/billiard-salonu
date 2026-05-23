@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -7,7 +8,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Version 9 Compatibility) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -32,9 +33,10 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center; }
 
-        /* Header Neon */
+        header { padding: 3rem 0; }
+
         h1 {
-            font-size: clamp(2rem, 10vw, 4.5rem);
+            font-size: clamp(2rem, 10vw, 4rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 8px;
@@ -47,54 +49,61 @@
             color: var(--neon-green);
             letter-spacing: 4px;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-shadow: 0 0 5px var(--neon-green);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
         }
 
         .user-info input {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            padding: 18px 30px;
-            border-radius: 15px;
+            padding: 16px 25px;
+            border-radius: 12px;
             color: white;
             width: 100%;
-            max-width: 400px;
+            max-width: 350px;
             text-align: center;
             outline: none;
             backdrop-filter: blur(10px);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
         }
+        .user-info input:focus { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
 
         /* Tables Grid */
         .tables-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
         .table-card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 25px;
+            border-radius: 20px;
             overflow: hidden;
             transition: var(--transition);
             cursor: pointer;
+            text-align: left;
         }
 
-        .table-card:hover { transform: translateY(-10px); border-color: var(--neon-green); }
+        .table-card:hover { transform: translateY(-8px); border-color: var(--neon-green); }
 
-        .card-image { width: 100%; height: 180px; overflow: hidden; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; }
+        .card-image { width: 100%; height: 180px; overflow: hidden; background: #111; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.5s; }
+        .table-card:hover .card-image img { opacity: 1; transform: scale(1.05); }
 
         .card-content { padding: 20px; }
+        .card-content h3 { font-size: 1.4rem; margin-bottom: 5px; letter-spacing: 1px; }
+        .card-content p { font-size: 0.8rem; color: var(--neon-green); margin-bottom: 15px; opacity: 0.8; }
 
         .status-badge {
             display: inline-block;
-            padding: 6px 20px;
+            padding: 6px 18px;
             border-radius: 50px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             border: 1px solid var(--neon-green);
             color: var(--neon-green);
@@ -104,116 +113,84 @@
         .status-confirmed { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); }
         .status-pending { border-color: #ffcc00; color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
 
-        /* Viktoria Reklam - Kiçik və İncə */
-        .ad-section {
-            margin-top: 5rem;
-            text-align: left;
-        }
+        /* Viktoria Reklam - İncə və Reklam Hissi Verən */
+        .ad-section { margin-top: 4rem; text-align: left; max-width: 900px; margin-left: auto; margin-right: auto; }
 
         .google-label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--neon-green);
-            text-shadow: 0 0 5px var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
             text-transform: uppercase;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
+            margin-bottom: 6px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            opacity: 0.8;
         }
 
         .ad-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 15px 30px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(57, 255, 20, 0.1);
+            border-radius: 12px;
+            padding: 12px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(5px);
         }
 
-        .ad-card h2 { font-size: 1.2rem; color: #fff; }
-        .ad-card p { font-size: 0.85rem; color: #888; }
+        .ad-card h2 { font-size: 1.1rem; color: #fff; font-weight: 700; }
+        .ad-card p { font-size: 0.8rem; color: #777; }
 
         .btn-ad {
             border: 1px solid var(--neon-green);
             color: var(--neon-green);
-            padding: 8px 20px;
-            border-radius: 8px;
+            padding: 6px 15px;
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
             transition: 0.3s;
+            white-space: nowrap;
+            margin-left: 15px;
         }
         .btn-ad:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
 
         /* Footer Neon */
         .footer {
-            margin-top: 4rem;
-            padding: 30px;
-            border-top: 1px solid rgba(57, 255, 20, 0.1);
+            margin-top: 5rem;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(57, 255, 20, 0.05);
         }
 
-        .footer p {
+        .footer-brand {
             color: var(--neon-green);
-            text-shadow: 0 0 5px var(--neon-green);
-            font-size: 0.75rem;
+            text-shadow: 0 0 10px var(--neon-green);
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .footer-copy {
+            color: rgba(57, 255, 20, 0.5);
+            font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* Admin Panel Section */
-        .admin-trigger { margin-top: 50px; opacity: 0.2; cursor: pointer; font-size: 10px; }
-        #adminPanel {
-            display: none;
-            background: #111;
-            border: 1px dashed var(--neon-green);
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: left;
-        }
+        /* Admin & Modal Stylleri (Eyni qaldı) */
+        .admin-trigger { margin-top: 30px; opacity: 0.3; cursor: pointer; font-size: 9px; color: #444; }
+        #adminPanel { display: none; background: #0a0a0a; border: 1px solid #222; margin-top: 20px; padding: 20px; border-radius: 15px; text-align: left; }
+        .res-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; font-size: 0.8rem; }
+        
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #0a0a0a; padding: 30px; border: 1px solid var(--neon-green); border-radius: 20px; width: 90%; max-width: 400px; position: relative;}
+        .btn-main { background: var(--neon-green); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .res-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #222;
-            font-size: 0.85rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #0a0a0a;
-            padding: 30px;
-            border: 1px solid var(--neon-green);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .btn-main {
-            background: var(--neon-green);
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-weight: 900;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        select, input[type="time"] {
-            width: 100%; padding: 12px; background: #151515; border: 1px solid #333; color: white; border-radius: 8px; margin-top: 10px;
+        @media (max-width: 600px) {
+            .ad-card { flex-direction: column; text-align: center; gap: 15px; }
+            .btn-ad { margin-left: 0; width: 100%; }
         }
     </style>
 </head>
@@ -228,29 +205,31 @@
             </div>
         </header>
 
+        <!-- Masalar Grid -->
         <div class="tables-grid" id="tablesGrid">
-            <!-- Masalar JavaScript ile yüklenecek -->
+            <!-- Masalar JavaScript ilə bura dolacaq -->
         </div>
 
-        <!-- Viktoria Reklam -->
+        <!-- Viktoria Reklam Bölməsi -->
         <div class="ad-section">
             <p class="google-label">Google Reklam</p>
             <div class="ad-card">
                 <div>
                     <h2>Viktoria Paltar Boyaları</h2>
-                    <p>Geyimlərinizə yeni həyat verin.</p>
+                    <p>Geyimlərinizə yeni və parlaq həyat verin.</p>
                 </div>
                 <a href="https://viktoria-az.store" target="_blank" class="btn-ad">SAYTA KEÇİD</a>
             </div>
         </div>
 
+        <!-- Footer -->
         <footer class="footer">
-            <p>Bütün haqları qorunur © 2026 | Aristokrat Brand</p>
-            <div class="admin-trigger" onclick="toggleAdmin()">Admin Girişi</div>
+            <div class="footer-brand">ARISTOKRAT</div>
+            <p class="footer-copy">Bütün haqları qorunur © 2026</p>
             
-            <!-- Admin Panel -->
+            <div class="admin-trigger" onclick="toggleAdmin()">SİSTEM GİRİŞİ</div>
             <div id="adminPanel">
-                <h3 style="color: var(--neon-green); margin-bottom: 10px;">Gözləyən Rezervasiyalar</h3>
+                <h4 style="color: var(--neon-green); margin-bottom: 15px;">Admin İdarəetmə Paneli</h4>
                 <div id="adminList">Yüklənir...</div>
             </div>
         </footer>
@@ -259,83 +238,92 @@
     <!-- Rezerv Modalı -->
     <div id="resModal" class="modal">
         <div class="modal-content">
-            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 15px;">Masa Seçin</h2>
-            <label>Başlanğıc Saatı</label>
-            <input type="time" id="startTime" value="20:00">
-            
-            <label style="display:block; margin-top:15px;">Müddət</label>
-            <select id="duration">
-                <option value="60">1 Saat</option>
-                <option value="90">1 Saat 30 Dəq</option>
-                <option value="120">2 Saat</option>
-                <option value="180">3 Saat</option>
-            </select>
+            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 15px; text-transform: uppercase;">Masa Seçin</h2>
+            <div style="text-align: left;">
+                <label style="font-size: 0.8rem; color: #555;">BAŞLANĞIC SAATI</label>
+                <input type="time" id="startTime" value="20:00" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px; margin-top:5px;">
+                
+                <label style="display:block; margin-top:15px; font-size: 0.8rem; color: #555;">MÜDDƏT SEÇİN</label>
+                <select id="duration" style="width:100%; padding:12px; background:#111; border:1px solid #222; color:white; border-radius:8px; margin-top:5px;">
+                    <option value="60">1 Saat</option>
+                    <option value="90">1 Saat 30 Dəq</option>
+                    <option value="120">2 Saat</option>
+                    <option value="180">3 Saat</option>
+                </select>
+            </div>
 
-            <button class="btn-main" onclick="requestReservation()">WhatsApp ilə Bildir</button>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; margin-top:10px; cursor:pointer; width:100%;">Bağla</button>
+            <button class="btn-main" onclick="requestReservation()">WhatsApp İlə Göndər</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; width:100%; font-size: 0.7rem;">LƏĞV ET</button>
         </div>
     </div>
 
     <script>
         // --- FIREBASE SETUP ---
-        // Bu demo konfiqurasiyadır. Öz Firebase-inizi bağlaya bilərsiniz.
-        const firebaseConfig = {
-            databaseURL: "https://billiard-aristokrat-default-rtdb.firebaseio.com/" 
-        };
+        const firebaseConfig = { databaseURL: "https://billiard-aristokrat-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let selectedTableId = null;
+        
+        // Masa datası və real şəkil linkləri
         const tables = [
-            { id: 1, name: "Masa 1", type: "Rus Bilyardı", img: "billiard1.webp" },
-            { id: 2, name: "Masa 2", type: "Rus Bilyardı", img: "billiard2.webp" },
-            { id: 3, name: "Masa 3", type: "Rus Bilyardı", img: "billiard3.webp" },
-            { id: 4, name: "Masa 4", type: "Amerikan Pool", img: "billiard4.jpg" },
-            { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "tennis.jpg" }
+            { id: 1, name: "Masa 1", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=500" },
+            { id: 2, name: "Masa 2", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=500" },
+            { id: 3, name: "Masa 3", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1574672039761-3957d8a1bcc3?q=80&w=500" },
+            { id: 4, name: "Masa 4", type: "Amerikan Pool", img: "https://images.unsplash.com/photo-1538321469612-4110439863e0?q=80&w=500" },
+            { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "https://images.unsplash.com/photo-1534158914592-062992fbe900?q=80&w=500" }
         ];
 
-        // --- MASALARI GÖSTƏR ---
-        function renderTables(resData) {
+        // --- İLK RENDER (Firebase gözləmədən) ---
+        function initialRender() {
             const grid = document.getElementById('tablesGrid');
-            grid.innerHTML = '';
-
-            tables.forEach(t => {
-                // Bu masa üçün aktiv rezerv varmı?
-                const activeRes = Object.values(resData || {}).find(r => r.tableId === t.id && r.status !== 'expired');
-                
-                let statusHtml = '<span class="status-badge">Mövcuddur</span>';
-                if (activeRes) {
-                    if (activeRes.status === 'confirmed') {
-                        statusHtml = `<span class="status-badge status-confirmed">Rezerv: ${activeRes.start}-${activeRes.end}</span>`;
-                    } else {
-                        statusHtml = `<span class="status-badge status-pending">Təsdiq Gözləyir...</span>`;
-                    }
-                }
-
-                grid.innerHTML += `
-                    <div class="table-card" onclick="openModal(${t.id}, '${t.name}')">
-                        <div class="card-image"><img src="${t.img}"></div>
-                        <div class="card-content">
-                            <h3>${t.name}</h3>
-                            <p>${t.type}</p>
-                            ${statusHtml}
+            grid.innerHTML = tables.map(t => `
+                <div class="table-card" id="card-${t.id}" onclick="openModal(${t.id}, '${t.name}')">
+                    <div class="card-image"><img src="${t.img}" alt="${t.name}"></div>
+                    <div class="card-content">
+                        <h3>${t.name}</h3>
+                        <p>${t.type}</p>
+                        <div id="status-container-${t.id}">
+                            <span class="status-badge">Mövcuddur</span>
                         </div>
                     </div>
-                `;
+                </div>
+            `).join('');
+        }
+
+        // --- STATUSLARI YENİLƏ ---
+        function updateStatuses(resData) {
+            tables.forEach(t => {
+                const container = document.getElementById(`status-container-${t.id}`);
+                const activeRes = Object.values(resData || {}).find(r => r.tableId === t.id && r.status !== 'expired');
+                
+                if (activeRes) {
+                    if (activeRes.status === 'confirmed') {
+                        container.innerHTML = `<span class="status-badge status-confirmed">DOLUDUR: ${activeRes.start}-${activeRes.end}</span>`;
+                    } else {
+                        container.innerHTML = `<span class="status-badge status-pending">Təsdiq Gözlənilir</span>`;
+                    }
+                } else {
+                    container.innerHTML = `<span class="status-badge">Mövcuddur</span>`;
+                }
             });
         }
 
-        // --- REAL-TIME DATA ---
+        // Real-time Firebase Dinləyicisi
         db.ref('reservations').on('value', (snapshot) => {
             const data = snapshot.val();
-            renderTables(data);
+            updateStatuses(data);
             renderAdminList(data);
         });
 
-        // --- MODAL İŞLƏRİ ---
+        // --- MODAL & REZERV ---
         function openModal(id, name) {
-            const customer = document.getElementById('customerName').value;
-            if(!customer) return alert("Zəhmət olmasa adınızı yazın!");
+            const customer = document.getElementById('customerName').value.trim();
+            if(!customer) {
+                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                return;
+            }
             selectedTableId = id;
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('resModal').style.display = 'flex';
@@ -343,68 +331,48 @@
 
         function closeModal() { document.getElementById('resModal').style.display = 'none'; }
 
-        // --- REZERV SORĞUSU (WhatsApp + Firebase Pending) ---
         function requestReservation() {
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
             const dur = document.getElementById('duration').value;
             
-            // Bitiş vaxtını hesabla
             let [h, m] = start.split(':').map(Number);
             let totalMins = h * 60 + m + parseInt(dur);
             let end = Math.floor(totalMins/60).toString().padStart(2,'0') + ":" + (totalMins%60).toString().padStart(2,'0');
 
-            const resId = Date.now(); // Unique ID
+            const resId = Date.now();
 
-            // 1. Firebase-ə "Gözləmədə" olaraq yaz (Amma hələ masanı tam bağlamır, sadəcə qeyd yaradır)
             db.ref('reservations/' + resId).set({
-                id: resId,
-                customer: name,
-                tableId: selectedTableId,
-                start: start,
-                end: end,
-                status: 'pending',
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                id: resId, customer: name, tableId: selectedTableId, start: start, end: end, status: 'pending'
             });
 
-            // 2. WhatsApp-ı aç
-            const waMsg = `Salam, Aristokrat! %0A${selectedTableId}-ci masanı rezerv etmək istəyirəm. %0AAd: ${name} %0ASaat: ${start} - ${end} %0A%0ATəsdiqləməyinizi gözləyirəm.`;
+            const waMsg = `Salam, Aristokrat! %0A${selectedTableId}-ci masanı rezerv etmək istəyirəm. %0AAd: ${name} %0ASaat: ${start} - ${end}`;
             window.open(`https://wa.me/994554828424?text=${waMsg}`, '_blank');
             
             closeModal();
-            alert("Sorğunuz göndərildi. Təsdiq edildikdən sonra masa rezerv olunacaq.");
         }
 
-        // --- ADMIN PANEL FUNKSİYALARI ---
+        // --- ADMIN ---
         function toggleAdmin() {
-            const pass = prompt("Admin Şifrəsi:");
-            if(pass === "2026") {
-                document.getElementById('adminPanel').style.display = 'block';
-            }
+            if(prompt("Şifrə:") === "2026") document.getElementById('adminPanel').style.display = 'block';
         }
 
         function renderAdminList(data) {
             const list = document.getElementById('adminList');
-            if(!data) { list.innerHTML = "Aktiv rezerv yoxdur."; return; }
-            
-            list.innerHTML = '';
-            Object.values(data).forEach(r => {
-                if(r.status === 'expired') return;
-                list.innerHTML += `
-                    <div class="res-item">
-                        <span>${r.customer} - Masa ${r.tableId} (${r.start}-${r.end}) [${r.status}]</span>
-                        <div>
-                            ${r.status === 'pending' ? `<button onclick="confirmRes(${r.id})" style="color:lime; background:none; border:1px solid lime; cursor:pointer; padding:2px 5px; margin-right:5px;">Təsdiqlə</button>` : ''}
-                            <button onclick="deleteRes(${r.id})" style="color:red; background:none; border:1px solid red; cursor:pointer; padding:2px 5px;">Sil</button>
-                        </div>
+            if(!data) { list.innerHTML = "Sifariş yoxdur."; return; }
+            list.innerHTML = Object.values(data).map(r => `
+                <div class="res-item">
+                    <span>Masa ${r.tableId}: ${r.customer} (${r.start}-${r.end})</span>
+                    <div>
+                        <button onclick="db.ref('reservations/${r.id}').update({status:'confirmed'})" style="color:lime; background:none; border:none; cursor:pointer;">[Təsdiq]</button>
+                        <button onclick="db.ref('reservations/${r.id}').remove()" style="color:red; background:none; border:none; cursor:pointer; margin-left:10px;">[Sil]</button>
                     </div>
-                `;
-            });
+                </div>
+            `).join('');
         }
 
-        function confirmRes(id) { db.ref('reservations/' + id).update({ status: 'confirmed' }); }
-        function deleteRes(id) { db.ref('reservations/' + id).remove(); }
-
+        // Başlat
+        initialRender();
     </script>
 </body>
 </html>
