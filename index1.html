@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aristokrat | Premium Billiard Lounge</title>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --neon-green: #39FF14;
@@ -15,14 +21,8 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Temel Sıfırlama */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body {
             background-color: var(--dark-bg);
             color: white;
@@ -31,7 +31,11 @@
             min-height: 100vh;
         }
 
-        /* Arka Plan Görseli */
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 10px; }
+
         .bg-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -41,359 +45,205 @@
             filter: grayscale(100%);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center; }
 
-        header {
-            padding: 3rem 0;
-            animation: fadeInDown 1s ease;
-        }
+        header { padding: 4rem 0; animation: fadeInDown 1s ease; }
 
-        /* ARISTOKRAT Başlığı */
         h1 {
-            font-size: clamp(2rem, 10vw, 4.5rem);
+            font-size: clamp(2.5rem, 10vw, 5rem);
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 8px;
-            padding-left: 8px;
-            margin-bottom: 10px;
+            letter-spacing: 12px;
             color: #fff;
-            text-shadow: 0 0 20px var(--neon-green);
-            width: 100%;
-            display: inline-block;
+            text-shadow: 0 0 20px var(--neon-green), 0 0 40px rgba(57, 255, 20, 0.5);
+            margin-bottom: 15px;
         }
 
         .subtitle {
             color: var(--neon-green);
             font-weight: 300;
-            letter-spacing: 4px;
-            margin-bottom: 2.5rem;
+            letter-spacing: 6px;
             text-transform: uppercase;
             font-size: 0.9rem;
-        }
-
-        /* Kullanıcı Bilgisi Girişi */
-        .user-info {
             margin-bottom: 3rem;
+            opacity: 0.8;
         }
 
+        /* User Input Area */
+        .user-info { margin-bottom: 4rem; }
         .user-info input {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            padding: 18px 30px;
+            padding: 20px 35px;
             border-radius: 15px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             outline: none;
             text-align: center;
             transition: var(--transition);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
         .user-info input:focus {
             border-color: var(--neon-green);
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+            transform: scale(1.02);
         }
 
-        /* Masa Kartları Grid Yapısı */
+        /* Tables Section */
         .tables-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 6rem;
         }
 
         .table-card {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            backdrop-filter: blur(15px);
-            cursor: pointer;
+            border-radius: 30px;
+            overflow: hidden;
             transition: var(--transition);
+            cursor: pointer;
             position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            backdrop-filter: blur(10px);
         }
-
         .table-card:hover {
-            transform: translateY(-12px) scale(1.02);
+            transform: translateY(-15px) scale(1.03);
             border-color: var(--neon-green);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(57, 255, 20, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 20px rgba(57, 255, 20, 0.2);
         }
 
-        .card-image {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
+        .card-image { width: 100%; height: 220px; overflow: hidden; position: relative; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; opacity: 0.8; }
+        .table-card:hover .card-image img { transform: scale(1.1); opacity: 1; }
 
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .card-content {
-            padding: 20px;
-        }
-
-        .table-card h3 {
-            margin-bottom: 5px;
-            font-size: 1.6rem;
-            letter-spacing: 1px;
-        }
-
-        .table-card p {
-            font-size: 0.85rem;
-            opacity: 0.6;
-            color: var(--neon-green);
-            margin-bottom: 15px;
-        }
+        .card-content { padding: 25px; text-align: left; }
+        .card-content h3 { font-size: 1.7rem; margin-bottom: 8px; letter-spacing: 1px; color: #fff; }
+        .card-content p { font-size: 0.9rem; color: var(--neon-green); margin-bottom: 20px; opacity: 0.8; font-weight: 600; }
 
         .status-badge {
             display: inline-block;
-            padding: 6px 20px;
+            padding: 8px 22px;
             border-radius: 50px;
             font-size: 0.8rem;
-            font-weight: 700;
-            background: rgba(57, 255, 20, 0.1);
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
-            text-transform: uppercase;
-        }
-
-        .occupied {
-            border-color: #ff4444 !important;
-            color: #ff4444 !important;
-            background: rgba(255, 68, 68, 0.1) !important;
-        }
-
-        /* REKLAM BÖLMESİ STİLLƏRİ (Yığcamlaşdırılmış Yeni Dizayn) */
-        .ad-container {
-            margin: 5rem auto 3rem auto;
-            max-width: 1000px;
-            text-align: left;
-            padding: 0 1rem;
-        }
-
-        .google-label {
-            font-size: 11px;
-            color: #fff;
-            text-shadow: 0 0 8px var(--neon-green), 0 0 15px var(--neon-green);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 8px;
             font-weight: 800;
-            display: inline-block;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(57, 255, 20, 0.05);
         }
+        .status-confirmed { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); text-shadow: 0 0 5px #ff4444; }
+        .status-pending { border-color: #ffcc00; color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
 
+        /* --- AUTOMATIC SWIPE SLIDER --- */
+        .slider-title { text-align: left; color: var(--neon-green); font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 15px; text-transform: uppercase; font-weight: 900; }
+        .slider-section { margin-bottom: 6rem; position: relative; }
+        .slider-container {
+            width: 100%;
+            height: 450px;
+            border-radius: 35px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .slider-track { display: flex; width: 100%; height: 100%; transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); }
+        .slide { min-width: 100%; height: 100%; position: relative; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        .slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8)); }
+
+        /* --- 6 ADET INFO CARDS --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 6rem;
+        }
+        .info-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: left;
+            transition: var(--transition);
+        }
+        .info-card:hover {
+            border-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.04);
+            transform: translateY(-5px);
+        }
+        .info-card h4 { color: var(--neon-green); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 2px; }
+        .info-card p { color: #aaa; font-size: 1rem; line-height: 1.7; }
+
+        /* --- REKLAM BANNER (SLIM) --- */
+        .ad-container { margin: 4rem auto; max-width: 1000px; text-align: left; }
+        .google-label { font-size: 11px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; font-weight: 900; }
         .ad-banner {
-            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(25, 25, 25, 0.8) 100%);
+            background: linear-gradient(90deg, rgba(15,15,15,0.9) 0%, rgba(30,30,30,0.8) 100%);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
-            padding: 15px 30px; /* Azaldılmış daxili boşluq */
+            padding: 15px 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            backdrop-filter: blur(15px);
-            position: relative;
-            overflow: hidden;
-            min-height: 90px; /* Digər kartlardan fərqli, ensiz və zərif hündürlük */
+            backdrop-filter: blur(20px);
+            min-height: 80px;
         }
-
-        .ad-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(57, 255, 20, 0.05) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .ad-content {
-            text-align: left;
-        }
-
-        .ad-content h2 {
-            font-size: 1.4rem; /* Daha yığcam başlıq */
-            margin-bottom: 4px;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .ad-content p {
-            color: #aaa;
-            font-size: 0.85rem; /* Kiçildilmiş mətn ölçüsü */
-            line-height: 1.4;
-            max-width: 650px;
-        }
-
+        .ad-content h2 { font-size: 1.3rem; color: #fff; margin-bottom: 2px; }
+        .ad-content p { color: #777; font-size: 0.85rem; }
         .btn-ad {
-            background: transparent;
-            color: var(--neon-green);
             border: 1px solid var(--neon-green);
-            padding: 10px 22px; /* Kiçik buton ölçüsü */
+            color: var(--neon-green);
+            padding: 10px 25px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.85rem;
             text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            white-space: nowrap;
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
         }
+        .btn-ad:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
 
-        .btn-ad:hover {
-            background: var(--neon-green);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-green);
-        }
-
-        /* FOOTER STİLLƏRİ */
-        .footer {
-            padding: 40px 0;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-
+        /* Footer */
+        .footer { padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-logo {
             font-weight: 900;
-            letter-spacing: 5px;
+            letter-spacing: 10px;
             color: #fff;
-            text-shadow: 0 0 15px var(--neon-green), 0 0 25px var(--neon-green); /* Güclü neon effekti */
-            margin-bottom: 12px;
-            font-size: 1.4rem;
-        }
-
-        .copyright {
-            font-size: 0.75rem;
-            color: var(--neon-green);
-            text-shadow: 0 0 5px rgba(57, 255, 20, 0.6); /* Neon effektli hüquq mətni */
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #0a0a0a;
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid var(--neon-green);
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 0 50px rgba(57, 255, 20, 0.2);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--neon-green);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        select, input[type="time"] {
-            width: 100%;
-            padding: 15px;
-            background: #151515;
-            border: 1px solid #333;
-            color: white;
-            border-radius: 12px;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .btn-reserve {
-            background: var(--neon-green);
-            color: black;
-            border: none;
-            padding: 18px 30px;
-            border-radius: 15px;
-            font-weight: 900;
+            text-shadow: 0 0 20px var(--neon-green);
+            font-size: 1.5rem;
             cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
-            transition: var(--transition);
+            display: inline-block;
+            transition: 0.3s;
         }
+        .footer-logo:hover { transform: scale(1.1); }
+        .copyright { color: var(--neon-green); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 15px; opacity: 0.6; }
 
-        .btn-reserve:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 35px var(--neon-green);
-        }
+        /* Reservation Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
+        .modal-content { background: #0a0a0a; padding: 50px; border: 1px solid var(--neon-green); border-radius: 40px; width: 95%; max-width: 450px; box-shadow: 0 0 60px rgba(57, 255, 20, 0.2); position: relative; }
+        .close-btn { position: absolute; top: 25px; right: 30px; font-size: 2rem; color: #444; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: #fff; }
 
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            cursor: pointer;
-            font-size: 2rem;
-            color: #555;
-        }
+        .btn-main { background: var(--neon-green); color: #000; border: none; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; width: 100%; cursor: pointer; margin-top: 30px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(57, 255, 20, 0.3); transition: 0.3s; }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 35px var(--neon-green); }
 
-        .timeline {
-            margin-top: 15px;
-            font-size: 0.75rem;
-            color: #aaa;
-            background: rgba(0,0,0,0.3);
-            padding: 5px;
-            border-radius: 10px;
-        }
+        .input-group { text-align: left; margin-bottom: 25px; }
+        .input-group label { display: block; font-size: 0.8rem; color: #555; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .input-dark { width: 100%; padding: 18px; background: #111; border: 1px solid #222; color: white; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; }
+        .input-dark:focus { border-color: var(--neon-green); background: #151515; }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Animations */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
-            .ad-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px 15px;
-                gap: 15px;
-            }
-            .ad-content {
-                text-align: center;
-            }
-            .ad-content p {
-                margin: 0 auto;
-            }
-            h1 { font-size: 2.2rem; letter-spacing: 2px; padding-left: 2px;}
-            .container { padding: 1rem 0.5rem; }
+            .ad-banner { flex-direction: column; text-align: center; padding: 30px 20px; gap: 20px; }
+            .container { padding: 1rem; }
+            h1 { letter-spacing: 5px; }
+            .slider-container { height: 300px; }
         }
     </style>
 </head>
@@ -405,246 +255,214 @@
         <header>
             <h1>ARISTOKRAT</h1>
             <p class="subtitle">Premium Billiard & Lounge</p>
-            
             <div class="user-info">
-                <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." required>
+                <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." autocomplete="off">
             </div>
-
-            <button class="btn-reserve" onclick="scrollToTables()" style="width: auto; padding: 18px 50px;">REZERV EDİN</button>
         </header>
 
-        <div id="tables-section" class="tables-grid">
-            <!-- Masa 1 -->
-            <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
-                <div class="card-image">
-                    <img src="billiard1.webp" alt="Masa 1">
-                </div>
-                <div class="card-content">
-                    <h3>Masa 1</h3>
-                    <p>Rus Bilyardı</p>
-                    <div id="status-Masa-1" class="status-badge">Mövcuddur</div>
-                    <div id="time-Masa-1" class="timeline"></div>
-                </div>
-            </div>
+        <!-- Masalar Bölməsi -->
+        <div class="tables-grid" id="tablesGrid">
+            <!-- JavaScript ilə bura masalar dolacaq -->
+        </div>
 
-            <!-- Masa 2 -->
-            <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
-                <div class="card-image">
-                    <img src="billiard2.webp" alt="Masa 2">
-                </div>
-                <div class="card-content">
-                    <h3>Masa 2</h3>
-                    <p>Rus Bilyardı</p>
-                    <div id="status-Masa-2" class="status-badge">Mövcuddur</div>
-                    <div id="time-Masa-2" class="timeline"></div>
-                </div>
-            </div>
-
-            <!-- Masa 3 -->
-            <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
-                <div class="card-image">
-                    <img src="billiard3.webp" alt="Masa 3">
-                </div>
-                <div class="card-content">
-                    <h3>Masa 3</h3>
-                    <p>Rus Bilyardı</p>
-                    <div id="status-Masa-3" class="status-badge">Mövcuddur</div>
-                    <div id="time-Masa-3" class="timeline"></div>
-                </div>
-            </div>
-
-            <!-- Masa 4 -->
-            <div class="table-card" onclick="openModal('Masa 4 (Amerikan Pool)')">
-                <div class="card-image">
-                    <img src="billiard4.jpg" alt="Masa 4">
-                </div>
-                <div class="card-content">
-                    <h3>Masa 4</h3>
-                    <p>Amerikan Pool</p>
-                    <div id="status-Masa-4" class="status-badge">Mövcuddur</div>
-                    <div id="time-Masa-4" class="timeline"></div>
-                </div>
-            </div>
-
-            <!-- Tennis -->
-            <div class="table-card" onclick="openModal('Tennis 1')">
-                <div class="card-image">
-                    <img src="tennis.jpg" alt="Tennis 1">
-                </div>
-                <div class="card-content">
-                    <h3>Tennis 1</h3>
-                    <p>Masa Tennisi</p>
-                    <div id="status-Tennis-1" class="status-badge">Mövcuddur</div>
-                    <div id="time-Tennis-1" class="timeline"></div>
+        <!-- Avtomatik Sürüşən Slider -->
+        <div class="slider-section">
+            <p class="slider-title">Premium Qalereya</p>
+            <div class="slider-container">
+                <div class="slider-track" id="sliderTrack">
+                    <div class="slide"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200" alt="Interior 1"></div>
+                    <div class="slide"><img src="https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=1200" alt="Interior 2"></div>
+                    <div class="slide"><img src="https://images.unsplash.com/photo-1538321469612-4110439863e0?q=80&w=1200" alt="Interior 3"></div>
+                    <div class="slide"><img src="https://images.unsplash.com/photo-1574672039761-3957d8a1bcc3?q=80&w=1200" alt="Interior 4"></div>
+                    <div class="slide"><img src="https://images.unsplash.com/photo-1528605248644-14dd04cb11c7?q=80&w=1200" alt="Interior 5"></div>
                 </div>
             </div>
         </div>
 
-        <!-- REKLAM BÖLMESİ -->
+        <!-- 6 Ədəd Məlumat Kartı -->
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>VIP Xidmət</h4>
+                <p>Premium bilyard təcrübəsi üçün hazırlanmış özəl VIP otaqlarımızda vaxtınızı keçirin.</p>
+            </div>
+            <div class="info-card">
+                <h4>Peşəkar Masalar</h4>
+                <p>Beynəlxalq standartlara cavab verən, yüksək keyfiyyətli parçalarla örtülmüş peşəkar bilyard masaları.</p>
+            </div>
+            <div class="info-card">
+                <h4>Zəngin Mətbəx</h4>
+                <p>Oyun zamanı zövqünüzə oxşayacaq dadlı qəlyanaltılar və xüsusi kokteyllər sizi gözləyir.</p>
+            </div>
+            <div class="info-card">
+                <h4>Lounge Atmosferi</h4>
+                <p>Modern neon işıqlandırma və rahat interyer ilə tam istirahət üçün doğru məkandasınız.</p>
+            </div>
+            <div class="info-card">
+                <h4>Turnirlər</h4>
+                <p>Hər ay keçirilən bilyard turnirlərində iştirak edərək öz məharətinizi göstərin və mükafatlar qazanın.</p>
+            </div>
+            <div class="info-card">
+                <h4>Daimi Müştərilər</h4>
+                <p>Tez-tez qonağımız olan müştərilərə özəl endirim kartları və digər üstünlüklər təqdim edirik.</p>
+            </div>
+        </div>
+
+        <!-- Google Reklam Banner -->
         <div class="ad-container">
             <p class="google-label">Google Reklam</p>
             <div class="ad-banner">
                 <div class="ad-content">
                     <h2>Viktoria Paltar Boyaları</h2>
-                    <p>Sevdiyiniz geyimlərin rəngini ilk günkü kimi bərpa edin! Yüksək keyfiyyətli və qalıcı boyaların tək ünvanı.</p>
+                    <p>Geyimlərinizə parlaq və qalıcı rənglər verin. İndi sayta keçid edin!</p>
                 </div>
                 <a href="https://viktoria-az.store" target="_blank" class="btn-ad">SAYTA KEÇİD</a>
             </div>
         </div>
 
-        <!-- FOOTER -->
         <footer class="footer">
-            <div class="footer-logo">ARISTOKRAT</div>
-            <p class="copyright">Bütün haqları qorunur © 2026</p>
+            <div class="footer-logo" id="adminTrigger">ARISTOKRAT</div>
+            <p class="copyright">BÜTÜN HAQLARI QORUNUR © 2026</p>
         </footer>
     </div>
 
-    <!-- Rezervasyon Modalı -->
+    <!-- Rezerv Modalı -->
     <div id="resModal" class="modal">
-        <div class="modal-content" style="position: relative;">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle" style="color: var(--neon-green); margin-bottom: 25px; text-transform: uppercase;">Rezervasiya</h2>
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color: var(--neon-green); text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Rezervasiya</h2>
             
-            <div class="form-group">
-                <label>Başlanğıc Saatı (09:00 - 00:00)</label>
-                <input type="time" id="startTime" min="09:00" max="23:59" value="20:00">
+            <div class="input-group">
+                <label>Başlanğıc Saatı</label>
+                <input type="time" id="startTime" value="20:00" class="input-dark">
             </div>
 
-            <div class="form-group">
-                <label>Müddət (Saat)</label>
-                <select id="durationHours">
-                    <option value="1">1 Saat</option>
-                    <option value="2">2 Saat</option>
-                    <option value="3">3 Saat</option>
+            <div class="input-group">
+                <label>Oyun Müddəti</label>
+                <select id="duration" class="input-dark">
+                    <option value="60">1 Saat</option>
+                    <option value="90">1.5 Saat</option>
+                    <option value="120">2 Saat</option>
+                    <option value="180">3 Saat</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label>Əlavə Dəqiqə</label>
-                <select id="durationMinutes">
-                    <option value="10" selected>10 dəqiqə</option>
-                    <option value="20">20 dəqiqə</option>
-                    <option value="30">30 dəqiqə</option>
-                    <option value="40">40 dəqiqə</option>
-                    <option value="50">50 dəqiqə</option>
-                </select>
-            </div>
-
-            <button class="btn-reserve" onclick="completeReservation()">Rezervasiyanı Tamamla</button>
+            <button class="btn-main" onclick="processBooking()">WhatsApp ilə Tamamla</button>
         </div>
     </div>
 
     <script>
-        let selectedTable = "";
-        let reservations = JSON.parse(localStorage.getItem('billiard_reservations')) || [];
+        // --- FIREBASE KONFİQURASİYA ---
+        const firebaseConfig = {
+            databaseURL: "https://billiard-2fb1b-default-rtdb.europe-west1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        function scrollToTables() {
-            document.getElementById('tables-section').scrollIntoView({ behavior: 'smooth' });
+        let selectedTableId = null;
+        let adminClicks = 0;
+
+        const tableData = [
+            { id: 1, name: "Masa 1", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=500" },
+            { id: 2, name: "Masa 2", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=500" },
+            { id: 3, name: "Masa 3", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1574672039761-3957d8a1bcc3?q=80&w=500" },
+            { id: 4, name: "Masa 4", type: "Amerikan Pool", img: "https://images.unsplash.com/photo-1538321469612-4110439863e0?q=80&w=500" },
+            { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "https://images.unsplash.com/photo-1534158914592-062992fbe900?q=80&w=500" }
+        ];
+
+        // Masaları Render Et
+        function displayTables(reservations) {
+            const grid = document.getElementById('tablesGrid');
+            grid.innerHTML = tableData.map(t => {
+                const res = Object.values(reservations || {}).find(r => r.tableId === t.id);
+                let statusHtml = `<span class="status-badge">Mövcuddur</span>`;
+                
+                if (res) {
+                    if (res.status === 'confirmed') {
+                        statusHtml = `<span class="status-badge status-confirmed">RESERV: ${res.start} - ${res.end}</span>`;
+                    } else {
+                        statusHtml = `<span class="status-badge status-pending">Təsdiq Gözləyir</span>`;
+                    }
+                }
+
+                return `
+                    <div class="table-card" onclick="openModal(${t.id}, '${t.name}')">
+                        <div class="card-image"><img src="${t.img}" alt="${t.name}"></div>
+                        <div class="card-content">
+                            <h3>${t.name}</h3>
+                            <p>${t.type}</p>
+                            <div id="stat-${t.id}">${statusHtml}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function openModal(tableName) {
-            const name = document.getElementById('customerName').value.trim();
-            if (!name) {
+        // Firebase-dən Anlıq Məlumat Almaq
+        db.ref('reservations').on('value', snapshot => displayTables(snapshot.val()));
+
+        // Modal Funksiyaları
+        function openModal(id, name) {
+            if(!document.getElementById('customerName').value.trim()) {
                 alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
                 window.scrollTo({top: 0, behavior: 'smooth'});
                 return;
             }
-            selectedTable = tableName;
-            document.getElementById('modalTitle').innerText = tableName;
+            selectedTableId = id;
+            document.getElementById('modalTitle').innerText = name;
             document.getElementById('resModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('resModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('resModal').style.display = 'none'; }
 
-        function timeToMinutes(timeStr) {
-            const [h, m] = timeStr.split(':').map(Number);
-            return h * 60 + m;
-        }
-
-        function minutesToTime(totalMinutes) {
-            let h = Math.floor(totalMinutes / 60) % 24;
-            let m = totalMinutes % 60;
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-        }
-
-        function checkConflict(tableName, startMins, endMins) {
-            return reservations.some(res => {
-                if (res.table !== tableName) return false;
-                const resStart = timeToMinutes(res.start);
-                const resEnd = timeToMinutes(res.end);
-                return (startMins < resEnd && endMins > resStart);
-            });
-        }
-
-        function completeReservation() {
+        // Rezervasiyanı Proses Et
+        function processBooking() {
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
-            const dHours = parseInt(document.getElementById('durationHours').value);
-            const dMins = parseInt(document.getElementById('durationMinutes').value);
+            const duration = document.getElementById('duration').value;
             
-            if (!start) return alert("Zəhmət olmasa saat seçin!");
+            // Bitiş vaxtını hesabla
+            let [h, m] = start.split(':').map(Number);
+            let total = h * 60 + m + parseInt(duration);
+            let end = Math.floor(total/60).toString().padStart(2,'0') + ":" + (total%60).toString().padStart(2,'0');
 
-            const startTotalMins = timeToMinutes(start);
-            const durationTotalMins = (dHours * 60) + dMins;
-            const endTotalMins = startTotalMins + durationTotalMins;
-            const end = minutesToTime(endTotalMins);
-
-            if (startTotalMins < 540) {
-                alert("Müəssisə saat 09:00-da açılır.");
-                return;
-            }
-
-            if (checkConflict(selectedTable, startTotalMins, endTotalMins)) {
-                alert("Bu vaxt aralığı artıq doludur! Zəhmət olmasa başqa vaxt seçin.");
-                return;
-            }
-
-            const newReservation = {
+            const bookingId = Date.now();
+            
+            // Firebase-ə Yaz
+            db.ref('reservations/' + bookingId).set({
+                id: bookingId,
                 customer: name,
-                table: selectedTable,
+                tableId: selectedTableId,
                 start: start,
-                duration: `${dHours} saat ${dMins} dəq`,
-                end: end
-            };
+                end: end,
+                status: 'pending'
+            });
 
-            reservations.push(newReservation);
-            localStorage.setItem('billiard_reservations', JSON.stringify(reservations));
-
-            const msg = `Salam, ${selectedTable} üçün rezervasiya etmək istəyirəm.%0AAd: ${name}%0ABaşlanğıc: ${start}%0AMüddət: ${newReservation.duration}%0ABitiş: ${end}`;
+            // WhatsApp-a Yönləndir
+            const msg = `Salam Aristokrat! %0A${name} adlı müştəri Masa ${selectedTableId} üçün rezervasiya sorğusu göndərdi.%0AVaxt: ${start} - ${end}`;
             window.open(`https://wa.me/994554828424?text=${msg}`, '_blank');
-
-            updateUI();
+            
             closeModal();
         }
 
-        function updateUI() {
-            document.querySelectorAll('.status-badge').forEach(el => {
-                el.innerText = "Mövcuddur";
-                el.classList.remove('occupied');
-            });
-            document.querySelectorAll('.timeline').forEach(el => el.innerText = "");
+        // --- ADMİN KEÇİD MƏNTİQİ (3 KLİK) ---
+        document.getElementById('adminTrigger').addEventListener('click', () => {
+            adminClicks++;
+            if (adminClicks === 3) {
+                window.location.href = "admin/index.html";
+                adminClicks = 0;
+            }
+            setTimeout(() => adminClicks = 0, 2000);
+        });
 
-            reservations.forEach(res => {
-                const cleanId = res.table.includes('Tennis') ? 'Tennis-1' : `Masa-${res.table.match(/\d+/)}`;
-                const statusEl = document.getElementById(`status-${cleanId}`);
-                const timeEl = document.getElementById(`time-${cleanId}`);
+        // --- AUTOMATIC SLIDER ---
+        let slideIndex = 0;
+        const track = document.getElementById('sliderTrack');
+        setInterval(() => {
+            slideIndex = (slideIndex + 1) % 5;
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }, 4000);
 
-                if (statusEl) {
-                    statusEl.innerText = "REZERV OLUNUB";
-                    statusEl.classList.add('occupied');
-                }
-                if (timeEl) {
-                    const timeDiv = document.createElement('div');
-                    timeDiv.innerText = `${res.start} - ${res.end}`;
-                    timeEl.appendChild(timeDiv);
-                }
-            });
-        }
-
-        window.onload = updateUI;
-        window.onclick = function(e) { if (e.target == document.getElementById('resModal')) closeModal(); }
+        window.onclick = e => { if (e.target == document.getElementById('resModal')) closeModal(); }
     </script>
 </body>
 </html>
