@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aristokrat | Premium Billiard Lounge</title>
+    <title>Aristokrat | Bilyard Tennis Klub</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -315,10 +315,10 @@
     <div class="container">
         <header>
             <h1>ARISTOKRAT</h1>
-            <p class="subtitle">Premium Billiard & Lounge</p>
+            <p class="subtitle">Bilyard Tennis Klub</p>
 
             <!-- Baku saati göstəricisi -->
-            <div class="baku-clock" id="bakuClock">🕐 BAKU: --:--</div>
+            <div class="baku-clock" id="bakuClock">🕐 ŞƏKİ: --:--</div>
 
             <div class="user-info">
                 <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." required>
@@ -331,7 +331,7 @@
             <!-- Masa 1 -->
             <div class="table-card" onclick="openModal('Masa 1 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard1.webp" alt="Masa 1">
+                    <img src="billiard17.webp" alt="Masa 1">
                 </div>
                 <div class="card-content">
                     <h3>Masa 1</h3>
@@ -344,7 +344,7 @@
             <!-- Masa 2 -->
             <div class="table-card" onclick="openModal('Masa 2 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard2.webp" alt="Masa 2">
+                    <img src="billiard12.webp" alt="Masa 2">
                 </div>
                 <div class="card-content">
                     <h3>Masa 2</h3>
@@ -357,7 +357,7 @@
             <!-- Masa 3 -->
             <div class="table-card" onclick="openModal('Masa 3 (Rus Bilyardı)')">
                 <div class="card-image">
-                    <img src="billiard3.webp" alt="Masa 3">
+                    <img src="billiard11.webp" alt="Masa 3">
                 </div>
                 <div class="card-content">
                     <h3>Masa 3</h3>
@@ -383,7 +383,7 @@
             <!-- Tennis -->
             <div class="table-card" onclick="openModal('Tennis 1')">
                 <div class="card-image">
-                    <img src="tennis.jpg" alt="Tennis 1">
+                    <img src="tennis2.png" alt="Tennis 1">
                 </div>
                 <div class="card-content">
                     <h3>Tennis 1</h3>
@@ -407,8 +407,8 @@
             </div>
 
             <div class="form-group">
-                <label>Başlanğıc Saatı (09:00 - 00:00)</label>
-                <input type="time" id="startTime" min="09:00" max="23:59" value="20:00">
+                <label>Başlanğıc Saatı (12:00 - 00:00)</label>
+                <input type="time" id="startTime" min="12:00" max="23:59" value="20:00">
             </div>
 
             <div class="form-group">
@@ -441,7 +441,7 @@
         const WA_DAY   = '994515525200';   // <-- buraya gündüz nömrəsini yazın
 
         // 19:00-dan sonra bu nömrəyə göndərilir (gecə)
-        const WA_NIGHT = '994554828424';   // <-- gecə nömrəsi
+        const WA_NIGHT = '994557727557';   // <-- gecə nömrəsi
 
         // ─── BAKU SAATI (UTC+4) ──────────────────────────────────────────────
         function getBakuTime() {
@@ -488,7 +488,7 @@
             const hh = String(b.getHours()).padStart(2, '0');
             const mm = String(b.getMinutes()).padStart(2, '0');
             const ss = String(b.getSeconds()).padStart(2, '0');
-            document.getElementById('bakuClock').textContent = '🕐 BAKU: ' + hh + ':' + mm + ':' + ss;
+            document.getElementById('bakuClock').textContent = '🕐 ŞƏKİ: ' + hh + ':' + mm + ':' + ss;
 
             // Gecə yarısı sıfırlanma — saniyə dəqiqliyi ilə
             if (hh === '00' && mm === '00' && ss === '00') {
@@ -540,7 +540,7 @@
             // Aktiv WA nömrəsini göstər
             const activeWA = getActiveWA();
             const bakuHour = getBakuTime().getHours();
-            const session  = bakuHour < 19 ? 'Gündüz (09:00–19:00)' : 'Gecə (19:00–00:00)';
+            const session  = bakuHour < 19 ? 'Gündüz (12:00–19:00)' : 'Gecə (19:00–00:00)';
             document.getElementById('waNumberDisplay').textContent = '+' + activeWA + ' · ' + session;
 
             document.getElementById('resModal').style.display = 'flex';
@@ -566,7 +566,7 @@
 
             // İş saatları yoxlaması
             if (startTotalMins < 9 * 60) {
-                alert("Müəssisə saat 09:00-da açılır.");
+                alert("Müəssisə saat 12:00-da açılır.");
                 return;
             }
             if (endTotalMins > 24 * 60) {
