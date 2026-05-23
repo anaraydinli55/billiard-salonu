@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aristokrat | Premium Billiard Lounge</title>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK (Real-time Database üçün) -->
+    <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -99,7 +100,7 @@
         .table-card:hover { transform: translateY(-10px); border-color: var(--neon-green); }
 
         .card-image { width: 100%; height: 200px; overflow: hidden; background: #111; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.5s; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
         .table-card:hover .card-image img { opacity: 1; transform: scale(1.05); }
 
         .card-content { padding: 25px; }
@@ -117,17 +118,11 @@
             text-transform: uppercase;
         }
 
-        /* Dolu Masa Stili */
-        .status-confirmed { 
-            border-color: #ff4444; 
-            color: #ff4444; 
-            background: rgba(255, 68, 68, 0.15); 
-            text-shadow: 0 0 5px #ff4444; 
-        }
+        .status-confirmed { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.15); text-shadow: 0 0 5px #ff4444; }
         .status-pending { border-color: #ffcc00; color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
 
-        /* Viktoria Reklam */
-        .ad-section { margin-top: 5rem; text-align: left; max-width: 850px; margin-left: auto; margin-right: auto; }
+        /* Viktoria Reklam Section */
+        .ad-section { margin: 5rem auto 0 auto; text-align: left; max-width: 850px; }
         .google-label { font-size: 10px; color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; font-weight: bold; }
         .ad-card {
             background: rgba(255,255,255,0.02);
@@ -144,7 +139,7 @@
         .btn-ad { border: 1px solid var(--neon-green); color: var(--neon-green); padding: 8px 20px; border-radius: 8px; text-decoration: none; font-size: 0.75rem; font-weight: bold; transition: 0.3s; }
         .btn-ad:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
 
-        /* Footer */
+        /* Footer Section */
         .footer { margin-top: 5rem; padding: 50px; border-top: 1px solid rgba(57, 255, 20, 0.05); }
         .footer-brand {
             color: var(--neon-green);
@@ -160,9 +155,9 @@
         .footer-brand:hover { transform: scale(1.05); }
         .footer-copy { color: rgba(57, 255, 20, 0.3); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
 
-        /* Modal */
+        /* Modal Section */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: #0a0a0a; padding: 40px; border: 1px solid var(--neon-green); border-radius: 30px; width: 90%; max-width: 420px; }
+        .modal-content { background: #0a0a0a; padding: 40px; border: 1px solid var(--neon-green); border-radius: 30px; width: 90%; max-width: 420px; box-shadow: 0 0 30px rgba(57, 255, 20, 0.2); }
         .btn-main { background: var(--neon-green); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 25px; text-transform: uppercase; letter-spacing: 1px; }
 
         .input-dark { width:100%; padding:15px; background:#111; border:1px solid #222; color:white; border-radius:12px; margin-top:10px; outline:none; font-size: 1rem; }
@@ -181,12 +176,10 @@
             </div>
         </header>
 
-        <!-- Masalar Grid -->
         <div class="tables-grid" id="tablesGrid">
             <!-- Masalar JavaScript vasitəsilə bura yüklənir -->
         </div>
 
-        <!-- Viktoria Reklam -->
         <div class="ad-section">
             <p class="google-label">Google Reklam</p>
             <div class="ad-card">
@@ -199,7 +192,6 @@
         </div>
 
         <footer class="footer">
-            <!-- Admin Girişi: Bu yazıya 3 dəfə sürətlə klikləyin -->
             <div class="footer-brand" id="adminTrigger">ARISTOKRAT</div>
             <p class="footer-copy">Bütün haqları qorunur © 2026</p>
         </footer>
@@ -228,36 +220,23 @@
 
     <script>
         // --- FIREBASE KONFİQURASİYA ---
-        const firebaseConfig = { databaseURL: "https://https://billiard-salonu.vercel.app/anar1.html/" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNffURX4qrx7SgSLZpJknvFBlsbzGo6M0",
+            authDomain: "billiard-2fb1b.firebaseapp.com",
+            projectId: "billiard-2fb1b",
+            databaseURL: "https://billiard-2fb1b-default-rtdb.firebaseio.com",
+            storageBucket: "billiard-2fb1b.firebasestorage.app",
+            messagingSenderId: "522553754567",
+            appId: "1:522553754567:web:bb099a498aadef11a70fe2"
+        };
+
+        // Firebase-i Başlat
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let selectedTableId = null;
         let adminClickCount = 0;
 
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDNffURX4qrx7SgSLZpJknvFBlsbzGo6M0",
-  authDomain: "billiard-2fb1b.firebaseapp.com",
-  projectId: "billiard-2fb1b",
-  storageBucket: "billiard-2fb1b.firebasestorage.app",
-  messagingSenderId: "522553754567",
-  appId: "1:522553754567:web:bb099a498aadef11a70fe2",
-  measurementId: "G-1RBNRBVW9Q"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-        // Masa Məlumatları
         const tables = [
             { id: 1, name: "Masa 1", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1609132718484-cc90df3417f8?q=80&w=500" },
             { id: 2, name: "Masa 2", type: "Rus Bilyardı", img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=500" },
@@ -283,7 +262,7 @@ const analytics = getAnalytics(app);
             `).join('');
         }
 
-        // Real-Time Verilənləri Dinləmək
+        // Real-Time Məlumatları Dinləmək
         db.ref('reservations').on('value', (snapshot) => {
             const data = snapshot.val();
             updateStatuses(data);
@@ -292,7 +271,6 @@ const analytics = getAnalytics(app);
         function updateStatuses(resData) {
             tables.forEach(t => {
                 const container = document.getElementById(`status-container-${t.id}`);
-                // Bu masa üçün aktiv rezervi tapırıq
                 const activeRes = Object.values(resData || {}).find(r => r.tableId === t.id);
                 
                 if (activeRes) {
@@ -307,12 +285,10 @@ const analytics = getAnalytics(app);
             });
         }
 
-        // Modal Funksiyaları
         function openModal(id, name) {
             const customer = document.getElementById('customerName').value.trim();
             if(!customer) {
                 alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
-                window.scrollTo({top: 0, behavior: 'smooth'});
                 return;
             }
             selectedTableId = id;
@@ -322,20 +298,16 @@ const analytics = getAnalytics(app);
 
         function closeModal() { document.getElementById('resModal').style.display = 'none'; }
 
-        // Rezervasiya Sorğusu Göndərmək
         function requestReservation() {
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
             const dur = document.getElementById('duration').value;
             
-            // Bitiş vaxtını hesablamaq
             let [h, m] = start.split(':').map(Number);
             let totalMins = h * 60 + m + parseInt(dur);
             let end = Math.floor(totalMins/60).toString().padStart(2,'0') + ":" + (totalMins%60).toString().padStart(2,'0');
 
             const resId = Date.now();
-
-            // Firebase-ə "pending" (gözləmədə) olaraq qeyd edirik
             db.ref('reservations/' + resId).set({
                 id: resId,
                 customer: name,
@@ -345,10 +317,8 @@ const analytics = getAnalytics(app);
                 status: 'pending'
             });
 
-            // WhatsApp-ı açmaq
             const waMsg = `Salam, Aristokrat! %0A${selectedTableId}-ci masanı rezerv etmək istəyirəm. %0AAd: ${name} %0ASaat: ${start} - ${end}`;
             window.open(`https://wa.me/994554828424?text=${waMsg}`, '_blank');
-            
             closeModal();
         }
 
@@ -356,17 +326,14 @@ const analytics = getAnalytics(app);
         document.getElementById('adminTrigger').onclick = function() {
             adminClickCount++;
             if (adminClickCount === 3) {
-                window.location.href = "admin/index.html"; // Admin qovluğundakı səhifəyə yönləndirir
+                window.location.href = "admin/index.html";
                 adminClickCount = 0;
             }
-            // 2 saniyə ərzində 3 klik olmazsa, sayğacı sıfırla
             setTimeout(() => { adminClickCount = 0; }, 2000);
         };
 
-        // Səhifə yüklənəndə masaları göstər
         initialRender();
 
-        // Modal kənarına kliklədikdə bağlansın
         window.onclick = function(e) {
             if (e.target == document.getElementById('resModal')) closeModal();
         }
