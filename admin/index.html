@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -30,12 +30,8 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
 
-        /* Dashboard Header */
         header {
             text-align: center;
             padding: 40px 0;
@@ -51,12 +47,7 @@
             color: #fff;
         }
 
-        .stats {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
+        .stats { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
 
         .stat-box {
             background: var(--card-bg);
@@ -67,17 +58,9 @@
             color: #aaa;
         }
 
-        .stat-box span {
-            color: var(--neon-green);
-            font-weight: 900;
-            margin-left: 5px;
-        }
+        .stat-box span { color: var(--neon-green); font-weight: 900; margin-left: 5px; }
 
-        /* Reservation List */
-        .res-list {
-            display: grid;
-            gap: 15px;
-        }
+        .res-list { display: grid; gap: 15px; }
 
         .res-card {
             background: var(--card-bg);
@@ -91,44 +74,15 @@
             animation: slideUp 0.4s ease;
         }
 
-        .res-info h3 {
-            font-size: 1.2rem;
-            color: var(--neon-green);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
+        .res-info h3 { font-size: 1.2rem; color: var(--neon-green); margin-bottom: 5px; text-transform: uppercase; }
+        .res-info p { font-size: 0.9rem; color: #ddd; margin: 2px 0; }
+        .res-info small { color: #666; font-size: 0.75rem; display: block; margin-top: 5px; }
 
-        .res-info p {
-            font-size: 0.9rem;
-            color: #ddd;
-            margin: 2px 0;
-        }
-
-        .res-info small {
-            color: #666;
-            font-size: 0.75rem;
-            display: block;
-            margin-top: 5px;
-        }
-
-        /* Status Badges */
-        .status-tag {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 8px;
-            display: inline-block;
-        }
-
+        .status-tag { font-size: 0.7rem; padding: 4px 10px; border-radius: 5px; font-weight: bold; margin-top: 8px; display: inline-block; }
         .pending-tag { background: rgba(255, 204, 0, 0.1); color: #ffcc00; border: 1px solid #ffcc00; }
         .confirmed-tag { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
 
-        /* Admin Buttons */
-        .action-btns {
-            display: flex;
-            gap: 10px;
-        }
+        .action-btns { display: flex; gap: 10px; }
 
         .btn {
             padding: 12px 20px;
@@ -141,23 +95,12 @@
             transition: 0.3s;
         }
 
-        .btn-confirm {
-            background: var(--neon-green);
-            color: #000;
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
-        }
-
+        .btn-confirm { background: var(--neon-green); color: #000; box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
         .btn-confirm:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--neon-green); }
 
-        .btn-delete {
-            background: rgba(255, 68, 68, 0.1);
-            color: #ff4444;
-            border: 1px solid #ff4444;
-        }
-
+        .btn-delete { background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid #ff4444; }
         .btn-delete:hover { background: #ff4444; color: #fff; }
 
-        /* Login Screen */
         #loginOverlay {
             position: fixed;
             inset: 0;
@@ -175,6 +118,7 @@
             border-radius: 30px;
             text-align: center;
             width: 350px;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
         }
 
         .login-box input {
@@ -191,8 +135,6 @@
             outline: none;
         }
 
-        .login-box input:focus { border-color: var(--neon-green); }
-
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -201,7 +143,6 @@
         @media (max-width: 600px) {
             .res-card { flex-direction: column; text-align: center; gap: 20px; }
             .action-btns { width: 100%; flex-direction: column; }
-            .btn { width: 100%; }
         }
     </style>
 </head>
@@ -232,8 +173,18 @@
     </div>
 
     <script>
-        // FIREBASE SETUP
-        const firebaseConfig = { databaseURL: "https://aristokrat-billiard-default-rtdb.firebaseio.com/" };
+        // --- SİZİN FIREBASE KONFİQURASİYANIZ ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNffURX4qrx7SgSLZpJknvFBlsbzGo6M0",
+            authDomain: "billiard-2fb1b.firebaseapp.com",
+            projectId: "billiard-2fb1b",
+            databaseURL: "https://billiard-2fb1b-default-rtdb.firebaseio.com", // Mütləq lazımdır
+            storageBucket: "billiard-2fb1b.firebasestorage.app",
+            messagingSenderId: "522553754567",
+            appId: "1:522553754567:web:bb099a498aadef11a70fe2"
+        };
+
+        // Firebase-i Başlat
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -249,28 +200,6 @@
                 document.getElementById('passCode').value = '';
             }
         }
-
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDNffURX4qrx7SgSLZpJknvFBlsbzGo6M0",
-  authDomain: "billiard-2fb1b.firebaseapp.com",
-  projectId: "billiard-2fb1b",
-  storageBucket: "billiard-2fb1b.firebasestorage.app",
-  messagingSenderId: "522553754567",
-  appId: "1:522553754567:web:bb099a498aadef11a70fe2",
-  measurementId: "G-1RBNRBVW9Q"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
         // Məlumatların Yüklənməsi
         function loadData() {
@@ -288,7 +217,6 @@ const analytics = getAnalytics(app);
                 let pCount = 0;
                 let cCount = 0;
                 
-                // Məlumatları ən son gələndən əvvələ sıralamaq üçün array-ə çeviririk
                 const resArray = Object.values(data).reverse();
 
                 list.innerHTML = resArray.map(r => {
