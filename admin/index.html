@@ -250,6 +250,28 @@
             }
         }
 
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDNffURX4qrx7SgSLZpJknvFBlsbzGo6M0",
+  authDomain: "billiard-2fb1b.firebaseapp.com",
+  projectId: "billiard-2fb1b",
+  storageBucket: "billiard-2fb1b.firebasestorage.app",
+  messagingSenderId: "522553754567",
+  appId: "1:522553754567:web:bb099a498aadef11a70fe2",
+  measurementId: "G-1RBNRBVW9Q"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
         // Məlumatların Yüklənməsi
         function loadData() {
             db.ref('reservations').on('value', (snapshot) => {
