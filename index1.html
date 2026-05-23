@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -6,7 +7,7 @@
     <title>Aristokrat | Bilyard Tennis Klub</title>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -47,7 +48,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; text-align: center; }
 
-        header { padding: 4rem 0; animation: fadeInDown 1s ease; }
+        header { padding: 4rem 0 2rem 0; animation: fadeInDown 1s ease; }
 
         h1 {
             font-size: clamp(2.5rem, 10vw, 5rem);
@@ -56,7 +57,7 @@
             letter-spacing: 12px;
             color: #fff;
             text-shadow: 0 0 20px var(--neon-green), 0 0 40px rgba(57, 255, 20, 0.5);
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
         .subtitle {
@@ -65,8 +66,23 @@
             letter-spacing: 6px;
             text-transform: uppercase;
             font-size: 0.9rem;
-            margin-bottom: 3rem;
+            margin-bottom: 10px;
             opacity: 0.8;
+        }
+
+        /* Seki Saati */
+        .seki-clock {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-green);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 10px var(--neon-green);
+            display: inline-block;
+            padding: 10px 25px;
+            background: rgba(57, 255, 20, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
         }
 
         /* User Input Area */
@@ -255,6 +271,7 @@
         <header>
             <h1>ARISTOKRAT</h1>
             <p class="subtitle">Bilyard Tennis Klub</p>
+            <div class="seki-clock" id="sekiClock">ŞƏKİ: 00:00:00</div>
             <div class="user-info">
                 <input type="text" id="customerName" placeholder="ADINIZI DAXİL EDİN..." autocomplete="off">
             </div>
@@ -284,7 +301,7 @@
         <div class="info-grid">
             <div class="info-card">
                 <h4>Xidmətlər</h4>
-                <p>Gözəl musiqi və bitməyən bilyard həyəcanı sizi gözləyir.</p>
+                <p>Gözəl musiqi və bitməyən bilyard həyəcanı sizi gözləyir. Hər kəs üçün peşəkar mühit.</p>
             </div>
             <div class="info-card">
                 <h4>Peşəkar Masalar</h4>
@@ -300,11 +317,11 @@
             </div>
             <div class="info-card">
                 <h4>No1 Bilyard Klubu</h4>
-                <p>Rahatlıq və peşəkarlığın kəsişdiyi yeganə bilyard klubu.</p>
+                <p>Rahatlıq və peşəkarlığın kəsişdiyi yeganə bilyard klubu. Şəkinin ən elit məkanı.</p>
             </div>
             <div class="info-card">
                 <h4>Rezervasiya</h4>
-                <p>Masalarımız rezervasiya üçün hazırdır.</p>
+                <p>Masalarımız rezervasiya üçün hazırdır. Online sistemlə növbə gözləmədən yerinizi seçin.</p>
             </div>
         </div>
 
@@ -343,6 +360,7 @@
                     <option value="60">1 Saat</option>
                     <option value="90">1.5 Saat</option>
                     <option value="120">2 Saat</option>
+                    <option value="150">2.5 Saat</option>
                     <option value="180">3 Saat</option>
                 </select>
             </div>
@@ -352,6 +370,10 @@
     </div>
 
     <script>
+        // --- WHATSAPP NÖMRƏLƏRİ ---
+        const WA_NOMRE_1 = "994515525200"; // 19:00-a qədər (Gündüz)
+        const WA_NOMRE_2 = "994554828424"; // 19:00-dan sonra (Gecə)
+
         // --- FIREBASE KONFİQURASİYA ---
         const firebaseConfig = {
             databaseURL: "https://billiard-2fb1b-default-rtdb.europe-west1.firebasedatabase.app"
@@ -370,99 +392,103 @@
             { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "tennis2.jpeg" }
         ];
 
-        // Masaları Render Et
+        // --- GÜNLÜK SIFIRLANMA MƏNTİQİ ---
+        function getAzeDate() {
+            const now = new Date();
+            const azeTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (4 * 3600000));
+            return azeTime.toISOString().split('T')[0];
+        }
+
+        async function checkDailyReset() {
+            const today = getAzeDate();
+            const lastReset = localStorage.getItem('last_reset_date');
+
+            if (lastReset !== today) {
+                localStorage.clear();
+                localStorage.setItem('last_reset_date', today);
+                try {
+                    await db.ref('reservations').remove();
+                } catch (e) { console.error(e); }
+            }
+        }
+
+        // --- ŞƏKİ SAATI FUNKSİYASI ---
+        function updateClock() {
+            const now = new Date();
+            const azeTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (4 * 3600000));
+            const hours = String(azeTime.getHours()).padStart(2, '0');
+            const minutes = String(azeTime.getMinutes()).padStart(2, '0');
+            const seconds = String(azeTime.getSeconds()).padStart(2, '0');
+            document.getElementById('sekiClock').innerText = `ŞƏKİ: ${hours}:${minutes}:${seconds}`;
+            if (hours === "00" && minutes === "00" && seconds === "00") checkDailyReset();
+        }
+        setInterval(updateClock, 1000);
+
+        // --- MASALARIN GÖSTƏRİLMƏSİ ---
         function displayTables(reservations) {
             const grid = document.getElementById('tablesGrid');
             grid.innerHTML = tableData.map(t => {
                 const res = Object.values(reservations || {}).find(r => r.tableId === t.id);
                 let statusHtml = `<span class="status-badge">Mövcuddur</span>`;
-                
                 if (res) {
-                    if (res.status === 'confirmed') {
-                        statusHtml = `<span class="status-badge status-confirmed">RESERV: ${res.start} - ${res.end}</span>`;
-                    } else {
-                        statusHtml = `<span class="status-badge status-pending">Təsdiq Gözləyir</span>`;
-                    }
+                    if (res.status === 'confirmed') statusHtml = `<span class="status-badge status-confirmed">RESERV: ${res.start} - ${res.end}</span>`;
+                    else statusHtml = `<span class="status-badge status-pending">Təsdiq Gözləyir</span>`;
                 }
-
-                return `
-                    <div class="table-card" onclick="openModal(${t.id}, '${t.name}')">
-                        <div class="card-image"><img src="${t.img}" alt="${t.name}"></div>
-                        <div class="card-content">
-                            <h3>${t.name}</h3>
-                            <p>${t.type}</p>
-                            <div id="stat-${t.id}">${statusHtml}</div>
-                        </div>
-                    </div>
-                `;
+                return `<div class="table-card" onclick="openModal(${t.id}, '${t.name}')">
+                    <div class="card-image"><img src="${t.img}" alt="${t.name}"></div>
+                    <div class="card-content"><h3>${t.name}</h3><p>${t.type}</p><div id="stat-${t.id}">${statusHtml}</div></div>
+                </div>`;
             }).join('');
         }
 
-        // Firebase-dən Anlıq Məlumat Almaq
         db.ref('reservations').on('value', snapshot => displayTables(snapshot.val()));
 
-        // Modal Funksiyaları
+        // --- MODAL & REZERV FUNKSİYALARI ---
         function openModal(id, name) {
-            if(!document.getElementById('customerName').value.trim()) {
-                alert("Zəhmət olmasa əvvəlcə adınızı daxil edin!");
-                window.scrollTo({top: 0, behavior: 'smooth'});
-                return;
-            }
-            selectedTableId = id;
-            document.getElementById('modalTitle').innerText = name;
+            if(!document.getElementById('customerName').value.trim()) { alert("Zəhmət olmasa adınızı daxil edin!"); return; }
+            selectedTableId = id; document.getElementById('modalTitle').innerText = name;
             document.getElementById('resModal').style.display = 'flex';
         }
-
         function closeModal() { document.getElementById('resModal').style.display = 'none'; }
 
-        // Rezervasiyanı Proses Et
         function processBooking() {
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
             const duration = document.getElementById('duration').value;
             
-            // Bitiş vaxtını hesabla
-            let [h, m] = start.split(':').map(Number);
-            let total = h * 60 + m + parseInt(duration);
+            // Saat Məntiqi: Nömrə Yönləndirmə
+            let [startHour, startMinute] = start.split(':').map(Number);
+            let whatsappHedef = WA_NOMRE_1; // Default gündüz
+            if (startHour >= 19) {
+                whatsappHedef = WA_NOMRE_2; // Gecə nömrəsi
+            }
+
+            // Bitiş vaxtı hesabla
+            let total = startHour * 60 + startMinute + parseInt(duration);
             let end = Math.floor(total/60).toString().padStart(2,'0') + ":" + (total%60).toString().padStart(2,'0');
 
             const bookingId = Date.now();
-            
-            // Firebase-ə Yaz
             db.ref('reservations/' + bookingId).set({
-                id: bookingId,
-                customer: name,
-                tableId: selectedTableId,
-                start: start,
-                end: end,
-                status: 'pending'
+                id: bookingId, customer: name, tableId: selectedTableId, start: start, end: end, status: 'pending', date: getAzeDate()
             });
 
-            // WhatsApp-a Yönləndir
-            const msg = `Salam Aristokrat! %0A${name} adlı müştəri Masa ${selectedTableId} üçün rezervasiya sorğusu göndərdi.%0AVaxt: ${start} - ${end}`;
-            window.open(`https://wa.me/994554828424?text=${msg}`, '_blank');
-            
+            const msg = `Salam! %0A${name} adlı müştəri Masa ${selectedTableId} üçün rezervasiya etmək istəyir.%0AVaxt: ${start} - ${end}`;
+            window.open(`https://wa.me/${whatsappHedef}?text=${msg}`, '_blank');
             closeModal();
         }
 
-        // --- ADMİN KEÇİD MƏNTİQİ (3 KLİK) ---
-        document.getElementById('adminTrigger').addEventListener('click', () => {
+        // ADMİN KEÇİD (3 KLİK)
+        document.getElementById('adminTrigger').onclick = () => {
             adminClicks++;
-            if (adminClicks === 3) {
-                window.location.href = "admin/index.html";
-                adminClicks = 0;
-            }
+            if (adminClicks === 3) { window.location.href = "admin/index.html"; adminClicks = 0; }
             setTimeout(() => adminClicks = 0, 2000);
-        });
+        };
 
-        // --- AUTOMATIC SLIDER ---
-        let slideIndex = 0;
-        const track = document.getElementById('sliderTrack');
-        setInterval(() => {
-            slideIndex = (slideIndex + 1) % 5;
-            track.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }, 4000);
+        // SLIDER
+        let sIdx = 0;
+        setInterval(() => { sIdx = (sIdx + 1) % 6; document.getElementById('sliderTrack').style.transform = `translateX(-${sIdx * 100}%)`; }, 4000);
 
+        checkDailyReset();
         window.onclick = e => { if (e.target == document.getElementById('resModal')) closeModal(); }
     </script>
 </body>
