@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Aristokrat Premium Lounge</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --dark-bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(57, 255, 20, 0.2);
+            --confirm-red: #ff4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            background-image: radial-gradient(circle at 50% 0%, #1a3a12 0%, #050505 70%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Dashboard Header */
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px var(--neon-green);
+            color: #fff;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .stat-box span {
+            color: var(--neon-green);
+            font-weight: 900;
+            margin-left: 5px;
+        }
+
+        /* Reservation List */
+        .res-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .res-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.4s ease;
+        }
+
+        .res-info h3 {
+            font-size: 1.2rem;
+            color: var(--neon-green);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .res-info p {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin: 2px 0;
+        }
+
+        .res-info small {
+            color: #666;
+            font-size: 0.75rem;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Status Badges */
+        .status-tag {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .pending-tag { background: rgba(255, 204, 0, 0.1); color: #ffcc00; border: 1px solid #ffcc00; }
+        .confirmed-tag { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
+
+        /* Admin Buttons */
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 900;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-confirm {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        }
+
+        .btn-confirm:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--neon-green); }
+
+        .btn-delete {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .btn-delete:hover { background: #ff4444; color: #fff; }
+
+        /* Login Screen */
+        #loginOverlay {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: #0a0a0a;
+            padding: 40px;
+            border: 1px solid var(--neon-green);
+            border-radius: 30px;
+            text-align: center;
+            width: 350px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #222;
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            outline: none;
+        }
+
+        .login-box input:focus { border-color: var(--neon-green); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .res-card { flex-direction: column; text-align: center; gap: 20px; }
+            .action-btns { width: 100%; flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Şifrə Ekranı -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2 style="color: var(--neon-green); font-size: 1rem; letter-spacing: 3px;">SİSTEMƏ GİRİŞ</h2>
+            <input type="password" id="passCode" maxlength="4" placeholder="****">
+            <button class="btn btn-confirm" style="width: 100%;" onclick="validatePass()">DAXİL OL</button>
+        </div>
+    </div>
+
+    <div class="container" id="adminContent" style="display: none;">
+        <header>
+            <h1>IDARƏETMƏ PANELI</h1>
+            <div class="stats">
+                <div class="stat-box">GÖZLƏYƏN: <span id="pendingCount">0</span></div>
+                <div class="stat-box">TƏSDİQLİ: <span id="confirmedCount">0</span></div>
+            </div>
+            <a href="../index.html" style="color: #444; font-size: 0.7rem; text-decoration: none; margin-top: 15px; display: inline-block; text-transform: uppercase; letter-spacing: 1px;">← Ana Səhifəyə Qayıt</a>
+        </header>
+
+        <div id="adminList" class="res-list">
+            <!-- Məlumatlar bura yüklənəcək -->
+        </div>
+    </div>
+
+    <script>
+        // FIREBASE SETUP
+        const firebaseConfig = { databaseURL: "https://aristokrat-billiard-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Şifrə Yoxlanışı
+        function validatePass() {
+            const pass = document.getElementById('passCode').value;
+            if(pass === "2026") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadData();
+            } else {
+                alert("Şifrə yanlışdır!");
+                document.getElementById('passCode').value = '';
+            }
+        }
+
+        // Məlumatların Yüklənməsi
+        function loadData() {
+            db.ref('reservations').on('value', (snapshot) => {
+                const data = snapshot.val();
+                const list = document.getElementById('adminList');
+                
+                if(!data) {
+                    list.innerHTML = "<p style='text-align:center; color:#333; margin-top:50px;'>Heç bir sifariş yoxdur.</p>";
+                    document.getElementById('pendingCount').innerText = 0;
+                    document.getElementById('confirmedCount').innerText = 0;
+                    return;
+                }
+
+                let pCount = 0;
+                let cCount = 0;
+                
+                // Məlumatları ən son gələndən əvvələ sıralamaq üçün array-ə çeviririk
+                const resArray = Object.values(data).reverse();
+
+                list.innerHTML = resArray.map(r => {
+                    if(r.status === 'pending') pCount++; else cCount++;
+                    
+                    return `
+                        <div class="res-card">
+                            <div class="res-info">
+                                <h3>Masa ${r.tableId}</h3>
+                                <p>Müştəri: <b>${r.customer}</b></p>
+                                <p>Vaxt: <b>${r.start} - ${r.end}</b></p>
+                                <span class="status-tag ${r.status}-tag">
+                                    ${r.status === 'pending' ? '⌛ TƏSDİQ GÖZLƏYİR' : '✅ TƏSDİQLƏNİB'}
+                                </span>
+                                <small>Sifariş ID: ${r.id}</small>
+                            </div>
+                            <div class="action-btns">
+                                ${r.status === 'pending' ? 
+                                    `<button class="btn btn-confirm" onclick="confirmRes(${r.id})">Təsdiqlə</button>` : 
+                                    ''
+                                }
+                                <button class="btn btn-delete" onclick="deleteRes(${r.id})">Sil</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('pendingCount').innerText = pCount;
+                document.getElementById('confirmedCount').innerText = cCount;
+            });
+        }
+
+        // Təsdiqlə Funksiyası
+        function confirmRes(id) {
+            db.ref('reservations/' + id).update({ status: 'confirmed' });
+        }
+
+        // Sil Funksiyası
+        function deleteRes(id) {
+            if(confirm("Bu rezervasiyanı birdəfəlik silmək istəyirsiniz?")) {
+                db.ref('reservations/' + id).remove();
+            }
+        }
+    </script>
+</body>
+</html>
