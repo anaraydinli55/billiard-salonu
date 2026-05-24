@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aristokrat | Bilyard Tennis Klub</title>
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -22,7 +20,6 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Reset & Base */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body {
             background-color: var(--dark-bg);
@@ -32,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 10px; }
@@ -70,7 +66,6 @@
             opacity: 0.8;
         }
 
-        /* Seki Saati */
         .seki-clock {
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-green);
@@ -85,7 +80,6 @@
             border-radius: 50px;
         }
 
-        /* User Input Area */
         .user-info { margin-bottom: 4rem; }
         .user-info input {
             background: var(--card-bg);
@@ -108,7 +102,6 @@
             transform: scale(1.02);
         }
 
-        /* Tables Section */
         .tables-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -155,104 +148,177 @@
         .status-confirmed { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); text-shadow: 0 0 5px #ff4444; }
         .status-pending { border-color: #ffcc00; color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
 
-        /* --- AUTOMATIC SWIPE SLIDER --- */
+        /* ── TIKTOK BÖLÜMÜ ── */
+        .tiktok-section {
+            margin: 0 auto 5rem auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .tiktok-label {
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .tiktok-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Tiktok rəng hövzəsi — hover-da görünür */
+        .tiktok-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                rgba(105, 201, 208, 0.07) 0%,
+                rgba(238, 29, 82, 0.07) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .tiktok-btn:hover::before { opacity: 1; }
+
+        .tiktok-btn:hover {
+            border-color: rgba(238, 29, 82, 0.5);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.5),
+                0 0 30px rgba(238, 29, 82, 0.15),
+                0 0 60px rgba(105, 201, 208, 0.1);
+        }
+
+        /* TikTok SVG ikonu */
+        .tiktok-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 6px rgba(238,29,82,0.4));
+            transition: filter 0.3s;
+        }
+        .tiktok-btn:hover .tiktok-icon {
+            filter: drop-shadow(0 0 12px rgba(238,29,82,0.7)) drop-shadow(0 0 20px rgba(105,201,208,0.5));
+            animation: tiktok-wiggle 0.5s ease;
+        }
+
+        @keyframes tiktok-wiggle {
+            0%   { transform: rotate(0deg); }
+            25%  { transform: rotate(-8deg); }
+            75%  { transform: rotate(8deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .tiktok-text {
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+        .tiktok-text .tt-handle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .tiktok-text .tt-sub {
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .tiktok-arrow {
+            position: relative;
+            z-index: 1;
+            color: #333;
+            font-size: 1.2rem;
+            transition: transform 0.3s, color 0.3s;
+            margin-left: 4px;
+        }
+        .tiktok-btn:hover .tiktok-arrow {
+            transform: translateX(5px);
+            color: rgba(238,29,82,0.7);
+        }
+
+        /* Pulse animasiyası — simvolun ətrafında */
+        .tiktok-pulse {
+            display: inline-block;
+            position: relative;
+        }
+        .tiktok-pulse::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(238,29,82,0.2);
+            animation: tt-pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes tt-pulse {
+            0%   { transform: scale(1);   opacity: 0.6; }
+            50%  { transform: scale(1.3); opacity: 0; }
+            100% { transform: scale(1);   opacity: 0; }
+        }
+
+        /* ── SLIDER ── */
         .slider-title { text-align: left; color: var(--neon-green); font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 15px; text-transform: uppercase; font-weight: 900; }
         .slider-section { margin-bottom: 6rem; position: relative; }
-        .slider-container {
-            width: 100%;
-            height: 450px;
-            border-radius: 35px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
+        .slider-container { width: 100%; height: 450px; border-radius: 35px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .slider-track { display: flex; width: 100%; height: 100%; transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); }
         .slide { min-width: 100%; height: 100%; position: relative; }
         .slide img { width: 100%; height: 100%; object-fit: cover; }
         .slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8)); }
 
-        /* --- 6 ADET INFO CARDS --- */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 6rem;
-        }
-        .info-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 40px;
-            border-radius: 30px;
-            text-align: left;
-            transition: var(--transition);
-        }
-        .info-card:hover {
-            border-color: var(--neon-green);
-            background: rgba(57, 255, 20, 0.04);
-            transform: translateY(-5px);
-        }
+        /* ── INFO CARDS ── */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 6rem; }
+        .info-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 40px; border-radius: 30px; text-align: left; transition: var(--transition); }
+        .info-card:hover { border-color: var(--neon-green); background: rgba(57, 255, 20, 0.04); transform: translateY(-5px); }
         .info-card h4 { color: var(--neon-green); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 2px; }
         .info-card p { color: #aaa; font-size: 1rem; line-height: 1.7; }
 
-        /* --- REKLAM BANNER (SLIM) --- */
+        /* ── AD BANNER ── */
         .ad-container { margin: 4rem auto; max-width: 1000px; text-align: left; }
         .google-label { font-size: 11px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; font-weight: 900; }
-        .ad-banner {
-            background: linear-gradient(90deg, rgba(15,15,15,0.9) 0%, rgba(30,30,30,0.8) 100%);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 15px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(20px);
-            min-height: 80px;
-        }
+        .ad-banner { background: linear-gradient(90deg, rgba(15,15,15,0.9) 0%, rgba(30,30,30,0.8) 100%); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); min-height: 80px; }
         .ad-content h2 { font-size: 1.3rem; color: #fff; margin-bottom: 2px; }
         .ad-content p { color: #777; font-size: 0.85rem; }
-        .btn-ad {
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
+        .btn-ad { border: 1px solid var(--neon-green); color: var(--neon-green); padding: 10px 25px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem; }
         .btn-ad:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
 
-        /* Footer */
+        /* ── FOOTER ── */
         .footer { padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-logo {
-            font-weight: 900;
-            letter-spacing: 10px;
-            color: #fff;
-            text-shadow: 0 0 20px var(--neon-green);
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: inline-block;
-            transition: 0.3s;
-        }
+        .footer-logo { font-weight: 900; letter-spacing: 10px; color: #fff; text-shadow: 0 0 20px var(--neon-green); font-size: 1.5rem; cursor: pointer; display: inline-block; transition: 0.3s; }
         .footer-logo:hover { transform: scale(1.1); }
         .copyright { color: var(--neon-green); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 15px; opacity: 0.6; }
 
-        /* Reservation Modal */
+        /* ── MODAL ── */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
         .modal-content { background: #0a0a0a; padding: 50px; border: 1px solid var(--neon-green); border-radius: 40px; width: 95%; max-width: 450px; box-shadow: 0 0 60px rgba(57, 255, 20, 0.2); position: relative; }
         .close-btn { position: absolute; top: 25px; right: 30px; font-size: 2rem; color: #444; cursor: pointer; transition: 0.3s; }
         .close-btn:hover { color: #fff; }
-
         .btn-main { background: var(--neon-green); color: #000; border: none; padding: 20px; border-radius: 15px; font-weight: 900; font-size: 1.1rem; width: 100%; cursor: pointer; margin-top: 30px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(57, 255, 20, 0.3); transition: 0.3s; }
         .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 35px var(--neon-green); }
-
         .input-group { text-align: left; margin-bottom: 25px; }
         .input-group label { display: block; font-size: 0.8rem; color: #555; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         .input-dark { width: 100%; padding: 18px; background: #111; border: 1px solid #222; color: white; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; }
         .input-dark:focus { border-color: var(--neon-green); background: #151515; }
 
-        /* Animations */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
@@ -260,6 +326,8 @@
             .container { padding: 1rem; }
             h1 { letter-spacing: 5px; }
             .slider-container { height: 300px; }
+            .tiktok-btn { padding: 16px 24px; gap: 12px; }
+            .tiktok-text .tt-handle { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -277,12 +345,41 @@
             </div>
         </header>
 
-        <!-- Masalar Bölməsi -->
-        <div class="tables-grid" id="tablesGrid">
-            <!-- JavaScript ilə bura masalar dolacaq -->
+        <!-- Masalar -->
+        <div class="tables-grid" id="tablesGrid"></div>
+
+        <!-- ── TİKTOK BÖLÜMÜ ── -->
+        <div class="tiktok-section">
+            <p class="tiktok-label">Bizi İzləyin</p>
+            <a
+                href="https://www.tiktok.com/@sheki.bilyard.club?_r=1&_t=ZS-96bUC0qlvYW"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tiktok-btn"
+                aria-label="TikTok səhifəmizə keçid edin"
+            >
+                <!-- TikTok SVG -->
+                <div class="tiktok-pulse">
+                    <svg class="tiktok-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Kölgə (cyan) -->
+                        <path d="M32.5 6.5C32.5 6.5 33.5 15.5 42 16.5V23C42 23 36 22.5 32.5 19.5V32C32.5 40 26 45.5 18.5 44C11 42.5 7 36 8.5 29C10 22 16.5 18 23 19V26C23 26 18.5 25.5 17 29C15.5 32.5 17.5 36.5 21.5 37.5C25.5 38.5 29 35.5 29 31.5V6.5H32.5Z" fill="rgba(105,201,208,0.5)" transform="translate(1.5, 1.5)"/>
+                        <!-- Kölgə (qırmızı) -->
+                        <path d="M32.5 6.5C32.5 6.5 33.5 15.5 42 16.5V23C42 23 36 22.5 32.5 19.5V32C32.5 40 26 45.5 18.5 44C11 42.5 7 36 8.5 29C10 22 16.5 18 23 19V26C23 26 18.5 25.5 17 29C15.5 32.5 17.5 36.5 21.5 37.5C25.5 38.5 29 35.5 29 31.5V6.5H32.5Z" fill="rgba(238,29,82,0.5)" transform="translate(-1.5, -1.5)"/>
+                        <!-- Əsas ağ -->
+                        <path d="M32.5 6.5C32.5 6.5 33.5 15.5 42 16.5V23C42 23 36 22.5 32.5 19.5V32C32.5 40 26 45.5 18.5 44C11 42.5 7 36 8.5 29C10 22 16.5 18 23 19V26C23 26 18.5 25.5 17 29C15.5 32.5 17.5 36.5 21.5 37.5C25.5 38.5 29 35.5 29 31.5V6.5H32.5Z" fill="white"/>
+                    </svg>
+                </div>
+
+                <div class="tiktok-text">
+                    <span class="tt-handle">@sheki.bilyard.club</span>
+                    <span class="tt-sub">TikTok-da Bizi İzləyin</span>
+                </div>
+
+                <span class="tiktok-arrow">→</span>
+            </a>
         </div>
 
-        <!-- Avtomatik Sürüşən Slider -->
+        <!-- Slider -->
         <div class="slider-section">
             <p class="slider-title">Premium Qalereya</p>
             <div class="slider-container">
@@ -297,11 +394,11 @@
             </div>
         </div>
 
-        <!-- 6 Ədəd Məlumat Kartı -->
+        <!-- Info Cards -->
         <div class="info-grid">
             <div class="info-card">
                 <h4>Xidmətlər / Qiymət</h4>
-                <p>Gözəl musiqi və bitməyən bilyard həyəcanı sizi gözləyir. Hər kəs üçün peşəkar mühit. Qiymət isə 1 saatı 7 azn.</p>
+                <p>Gözəl musiqi və bitməyən bilyard həyəcanı sizi gözləyir. Hər kəs üçün peşəkar mühit. <strong>1 saat</strong> cəmi <strong>7 AZN</strong>.</p>
             </div>
             <div class="info-card">
                 <h4>Peşəkar Masalar</h4>
@@ -348,12 +445,10 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" style="color: var(--neon-green); text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Rezervasiya</h2>
-            
             <div class="input-group">
                 <label>Başlanğıc Saatı</label>
                 <input type="time" id="startTime" value="20:00" class="input-dark">
             </div>
-
             <div class="input-group">
                 <label>Oyun Müddəti</label>
                 <select id="duration" class="input-dark">
@@ -364,17 +459,14 @@
                     <option value="180">3 Saat</option>
                 </select>
             </div>
-
             <button class="btn-main" onclick="processBooking()">WhatsApp ilə Tamamla</button>
         </div>
     </div>
 
     <script>
-        // --- WHATSAPP NÖMRƏLƏRİ ---
-        const WA_NOMRE_1 = "994515525200"; // 19:00-a qədər (Gündüz)
-        const WA_NOMRE_2 = "994554828424"; // 19:00-dan sonra (Gecə)
+        const WA_NOMRE_1 = "994515525200";
+        const WA_NOMRE_2 = "994557727557";
 
-        // --- FIREBASE KONFİQURASİYA ---
         const firebaseConfig = {
             databaseURL: "https://billiard-2fb1b-default-rtdb.europe-west1.firebasedatabase.app"
         };
@@ -392,7 +484,6 @@
             { id: 5, name: "Tennis 1", type: "Masa Tennisi", img: "tennis2.jpeg" }
         ];
 
-        // --- GÜNLÜK SIFIRLANMA MƏNTİQİ ---
         function getAzeDate() {
             const now = new Date();
             const azeTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (4 * 3600000));
@@ -402,29 +493,24 @@
         async function checkDailyReset() {
             const today = getAzeDate();
             const lastReset = localStorage.getItem('last_reset_date');
-
             if (lastReset !== today) {
                 localStorage.clear();
                 localStorage.setItem('last_reset_date', today);
-                try {
-                    await db.ref('reservations').remove();
-                } catch (e) { console.error(e); }
+                try { await db.ref('reservations').remove(); } catch (e) { console.error(e); }
             }
         }
 
-        // --- ŞƏKİ SAATI FUNKSİYASI ---
         function updateClock() {
             const now = new Date();
             const azeTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (4 * 3600000));
-            const hours = String(azeTime.getHours()).padStart(2, '0');
-            const minutes = String(azeTime.getMinutes()).padStart(2, '0');
-            const seconds = String(azeTime.getSeconds()).padStart(2, '0');
-            document.getElementById('sekiClock').innerText = `ŞƏKİ: ${hours}:${minutes}:${seconds}`;
-            if (hours === "00" && minutes === "00" && seconds === "00") checkDailyReset();
+            const h = String(azeTime.getHours()).padStart(2, '0');
+            const m = String(azeTime.getMinutes()).padStart(2, '0');
+            const s = String(azeTime.getSeconds()).padStart(2, '0');
+            document.getElementById('sekiClock').innerText = `ŞƏKİ: ${h}:${m}:${s}`;
+            if (h === "00" && m === "00" && s === "00") checkDailyReset();
         }
         setInterval(updateClock, 1000);
 
-        // --- MASALARIN GÖSTƏRİLMƏSİ ---
         function displayTables(reservations) {
             const grid = document.getElementById('tablesGrid');
             grid.innerHTML = tableData.map(t => {
@@ -443,10 +529,10 @@
 
         db.ref('reservations').on('value', snapshot => displayTables(snapshot.val()));
 
-        // --- MODAL & REZERV FUNKSİYALARI ---
         function openModal(id, name) {
-            if(!document.getElementById('customerName').value.trim()) { alert("Zəhmət olmasa adınızı daxil edin!"); return; }
-            selectedTableId = id; document.getElementById('modalTitle').innerText = name;
+            if (!document.getElementById('customerName').value.trim()) { alert("Zəhmət olmasa adınızı daxil edin!"); return; }
+            selectedTableId = id;
+            document.getElementById('modalTitle').innerText = name;
             document.getElementById('resModal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('resModal').style.display = 'none'; }
@@ -455,21 +541,17 @@
             const name = document.getElementById('customerName').value;
             const start = document.getElementById('startTime').value;
             const duration = document.getElementById('duration').value;
-            
-            // Saat Məntiqi: Nömrə Yönləndirmə
-            let [startHour, startMinute] = start.split(':').map(Number);
-            let whatsappHedef = WA_NOMRE_1; // Default gündüz
-            if (startHour >= 19) {
-                whatsappHedef = WA_NOMRE_2; // Gecə nömrəsi
-            }
 
-            // Bitiş vaxtı hesabla
+            let [startHour, startMinute] = start.split(':').map(Number);
+            let whatsappHedef = startHour >= 19 ? WA_NOMRE_2 : WA_NOMRE_1;
+
             let total = startHour * 60 + startMinute + parseInt(duration);
-            let end = Math.floor(total/60).toString().padStart(2,'0') + ":" + (total%60).toString().padStart(2,'0');
+            let end = Math.floor(total / 60).toString().padStart(2, '0') + ":" + (total % 60).toString().padStart(2, '0');
 
             const bookingId = Date.now();
             db.ref('reservations/' + bookingId).set({
-                id: bookingId, customer: name, tableId: selectedTableId, start: start, end: end, status: 'pending', date: getAzeDate()
+                id: bookingId, customer: name, tableId: selectedTableId,
+                start: start, end: end, status: 'pending', date: getAzeDate()
             });
 
             const msg = `Salam! %0A${name} adlı müştəri Masa ${selectedTableId} üçün rezervasiya etmək istəyir.%0AVaxt: ${start} - ${end}`;
@@ -477,19 +559,20 @@
             closeModal();
         }
 
-        // ADMİN KEÇİD (3 KLİK)
         document.getElementById('adminTrigger').onclick = () => {
             adminClicks++;
             if (adminClicks === 3) { window.location.href = "admin/index.html"; adminClicks = 0; }
             setTimeout(() => adminClicks = 0, 2000);
         };
 
-        // SLIDER
         let sIdx = 0;
-        setInterval(() => { sIdx = (sIdx + 1) % 6; document.getElementById('sliderTrack').style.transform = `translateX(-${sIdx * 100}%)`; }, 4000);
+        setInterval(() => {
+            sIdx = (sIdx + 1) % 6;
+            document.getElementById('sliderTrack').style.transform = `translateX(-${sIdx * 100}%)`;
+        }, 4000);
 
         checkDailyReset();
-        window.onclick = e => { if (e.target == document.getElementById('resModal')) closeModal(); }
+        window.onclick = e => { if (e.target == document.getElementById('resModal')) closeModal(); };
     </script>
 </body>
 </html>
